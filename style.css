@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #ffe81f; /* Золотой, как в Star Wars */
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-shadow: 0 0 5px #ff0;
+}
+
+#click-btn {
+    background: #333;
+    color: #ffe81f;
+    border: 2px solid #ffe81f;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.1s;
+    margin: 20px 0;
+}
+
+#click-btn:active {
+    transform: scale(0.95);
+}
+
+.upgrades {
+    margin-top: 30px;
+}
+
+.upgrade {
+    background: #222;
+    color: #fff;
+    border: 1px solid #ffe81f;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.upgrade:hover {
+    background: #333;
+}
+
+.cost {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.credits {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
