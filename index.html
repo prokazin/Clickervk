@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Wars Clicker | VK</title>
+    <title>Star Wars Lightsaber Clicker</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Star Wars Clicker</h1>
-        <div class="credits">⚡ Credits: <span id="credits">0</span></div>
+        <h1>Star Wars Lightsaber Clicker</h1>
+        <div class="force">⚡ Сила: <span id="credits">0</span></div>
+        
         <button id="click-btn">
-            <img src="assets/droid.png" alt="Droid" width="100">
+            <img src="assets/lightsaber.png" alt="Световой меч" class="lightsaber-img">
             <br>
-            Собрать детали
+            Ударить мечом
         </button>
+        
         <div class="upgrades">
             <h2>Улучшения</h2>
             <button class="upgrade" id="upgrade1">
-                Купить дроида (+1/сек) <br>
-                <span class="cost">Стоимость: 10 кредитов</span>
+                Нанять джедая (+1/сек) <br>
+                <span class="cost">Стоимость: 10 силы</span>
             </button>
             <button class="upgrade" id="upgrade2">
-                Нанять джедая (+5/сек) <br>
-                <span class="cost">Стоимость: 50 кредитов</span>
+                Нанять ситха (+5/сек) <br>
+                <span class="cost">Стоимость: 50 силы</span>
             </button>
         </div>
     </div>
