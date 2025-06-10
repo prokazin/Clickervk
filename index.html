@@ -2,31 +2,56 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Star Wars Lightsaber Clicker</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://vk.com/js/api/openapi.js?169" type="text/javascript"></script>
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
     <div class="container">
-        <h1>Star Wars Lightsaber Clicker</h1>
+        <h1>Lightsaber Clicker</h1>
         <div class="force">⚡ Сила: <span id="credits">0</span></div>
         
         <button id="click-btn">
-            <img src="assets/lightsaber.png" alt="Световой меч" class="lightsaber-img">
+            <img src="assets/lightsaber.png" alt="Меч" class="lightsaber-img">
             <br>
-            Ударить мечом
+            <span class="click-text">Ударить мечом</span>
         </button>
         
         <div class="upgrades">
-            <h2>Улучшения</h2>
+            <h2>Улучшения <span id="jedi-level">(Уровень 1)</span></h2>
+            
             <button class="upgrade" id="upgrade1">
-                Нанять джедая (+1/сек) <br>
-                <span class="cost">Стоимость: 10 силы</span>
+                <div class="upgrade-header">
+                    <span class="upgrade-name">Джедай-падаван</span>
+                    <span class="upgrade-count" id="upgrade1-count">0</span>
+                </div>
+                <div class="upgrade-info">
+                    +<span id="upgrade1-power">1</span> силы/сек
+                    <span class="cost">Цена: <span id="upgrade1-cost">10</span></span>
+                </div>
             </button>
+            
             <button class="upgrade" id="upgrade2">
-                Нанять ситха (+5/сек) <br>
-                <span class="cost">Стоимость: 50 силы</span>
+                <div class="upgrade-header">
+                    <span class="upgrade-name">Ситх-адепт</span>
+                    <span class="upgrade-count" id="upgrade2-count">0</span>
+                </div>
+                <div class="upgrade-info">
+                    +<span id="upgrade2-power">5</span> силы/сек
+                    <span class="cost">Цена: <span id="upgrade2-cost">50</span></span>
+                </div>
+            </button>
+            
+            <button class="upgrade" id="upgrade3">
+                <div class="upgrade-header">
+                    <span class="upgrade-name">Мастер-джедай</span>
+                    <span class="upgrade-count" id="upgrade3-count">0</span>
+                </div>
+                <div class="upgrade-info">
+                    +<span id="upgrade3-power">15</span> силы/сек
+                    <span class="cost">Цена: <span id="upgrade3-cost">200</span></span>
+                </div>
             </button>
         </div>
     </div>
