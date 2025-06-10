@@ -1,161 +1,104 @@
-// Игровые данные
-const gameData = {
+// Game State
+const game = {
     credits: 0,
     creditsPerSecond: 0,
     upgrades: [
-        { id: 1, count: 0, baseCost: 10, cost: 10, power: 1 },
-        { id: 2, count: 0, baseCost: 50, cost: 50, power: 5 },
-        { id: 3, count: 0, baseCost: 200, cost: 200, power: 15 }
+        { id: 1, count: 0, cost: 10, power: 1 },
+        { id: 2, count: 0, cost: 50, power: 5 }
     ],
-    version: 1
+    lastUpdate: Date.now()
 };
 
-// DOM элементы
+// DOM Elements
 const elements = {
     credits: document.getElementById('credits'),
     clickBtn: document.getElementById('click-btn'),
-    jediLevel: document.getElementById('jedi-level'),
-    upgrades: {
-        1: {
-            element: document.getElementById('upgrade1'),
-            count: document.getElementById('upgrade1-count'),
-            power: document.getElementById('upgrade1-power'),
-            cost: document.getElementById('upgrade1-cost')
-        },
-        2: {
-            element: document.getElementById('upgrade2'),
-            count: document.getElementById('upgrade2-count'),
-            power: document.getElementById('upgrade2-power'),
-            cost: document.getElementById('upgrade2-cost')
-        },
-        3: {
-            element: document.getElementById('upgrade3'),
-            count: document.getElementById('upgrade3-count'),
-            power: document.getElementById('upgrade3-power'),
-            cost: document.getElementById('upgrade3-cost')
-        }
-    }
+    jediLevel: document.getElementById('jedi-level')
 };
 
-// Инициализация игры
-function initGame() {
+// Initialize
+function init() {
     loadGame();
     setupEventListeners();
-    updateUI();
-    startGameLoop();
+    requestAnimationFrame(gameLoop);
     
-    // Проверяем наличие сохранения каждые 5 секунд
-    setInterval(saveGame, 5000);
+    // Auto-save every 30 seconds
+    setInterval(saveGame, 30000);
 }
 
-// Загрузка сохранения
-function loadGame() {
-    const savedData = localStorage.getItem('swClickerSave');
-    if (savedData) {
-        try {
-            const parsedData = JSON.parse(savedData);
-            if (parsedData.version === gameData.version) {
-                Object.assign(gameData, parsedData);
-                recalculateStats();
-            }
-        } catch (e) {
-            console.error('Ошибка загрузки сохранения', e);
-        }
-    }
-}
-
-// Сохранение игры
-function saveGame() {
-    localStorage.setItem('swClickerSave', JSON.stringify(gameData));
-}
-
-// Настройка обработчиков событий
+// Event Listeners
 function setupEventListeners() {
-    // Основной клик
-    elements.clickBtn.addEventListener('click', () => {
-        gameData.credits++;
-        updateUI();
-        animateClick();
-    });
+    elements.clickBtn.addEventListener('click', handleClick);
     
-    // Улучшения
-    for (let i = 1; i <= 3; i++) {
-        elements.upgrades[i].element.addEventListener('click', () => buyUpgrade(i));
-    }
+    document.getElementById('upgrade1').addEventListener('click', () => buyUpgrade(0));
+    document.getElementById('upgrade2').addEventListener('click', () => buyUpgrade(1));
 }
 
-// Покупка улучшения
-function buyUpgrade(upgradeId) {
-    const upgrade = gameData.upgrades[upgradeId - 1];
+// Game Logic
+function handleClick() {
+    game.credits++;
+    updateUI();
+}
+
+function buyUpgrade(index) {
+    const upgrade = game.upgrades[index];
     
-    if (gameData.credits >= upgrade.cost) {
-        gameData.credits -= upgrade.cost;
+    if (game.credits >= upgrade.cost) {
+        game.credits -= upgrade.cost;
         upgrade.count++;
-        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.count));
+        upgrade.cost = Math.floor(upgrade.cost * 1.15);
         
-        recalculateStats();
+        game.creditsPerSecond = game.upgrades.reduce((sum, u) => sum + (u.count * u.power), 0);
         updateUI();
-        animateUpgrade(upgradeId);
     }
 }
 
-// Пересчет статистики
-function recalculateStats() {
-    gameData.creditsPerSecond = gameData.upgrades.reduce((total, upgrade) => {
-        return total + (upgrade.count * upgrade.power);
-    }, 0);
+// Game Loop
+function gameLoop() {
+    const now = Date.now();
+    const delta = (now - game.lastUpdate) / 1000;
+    
+    if (delta >= 0.1) {
+        game.credits += game.creditsPerSecond * delta;
+        game.lastUpdate = now;
+        updateUI();
+    }
+    
+    requestAnimationFrame(gameLoop);
 }
 
-// Игровой цикл
-function startGameLoop() {
-    setInterval(() => {
-        if (gameData.creditsPerSecond > 0) {
-            gameData.credits += gameData.creditsPerSecond / 10;
-            updateUI();
-        }
-    }, 100);
-}
-
-// Обновление интерфейса
+// UI Update
 function updateUI() {
-    // Обновляем счетчик силы
-    elements.credits.textContent = Math.floor(gameData.credits);
+    elements.credits.textContent = Math.floor(game.credits);
     
-    // Обновляем уровень
-    const totalUpgrades = gameData.upgrades.reduce((sum, u) => sum + u.count, 0);
-    elements.jediLevel.textContent = `(Уровень ${Math.floor(totalUpgrades / 5) + 1})`;
-    
-    // Обновляем информацию об улучшениях
-    gameData.upgrades.forEach(upgrade => {
-        const ui = elements.upgrades[upgrade.id];
-        ui.count.textContent = upgrade.count;
-        ui.cost.textContent = upgrade.cost;
-        
-        // Подсвечиваем доступные улучшения
-        ui.element.style.borderColor = gameData.credits >= upgrade.cost ? '#4bd5ff' : '#ffe81f';
+    // Update upgrades info
+    game.upgrades.forEach((upgrade, i) => {
+        document.getElementById(`upgrade${i+1}-count`).textContent = upgrade.count;
+        document.getElementById(`upgrade${i+1}-cost`).textContent = upgrade.cost;
     });
-}
-
-// Анимация клика
-function animateClick() {
-    const img = document.querySelector('.lightsaber-img');
-    img.style.transform = 'rotate(30deg) scale(1.1)';
-    setTimeout(() => {
-        img.style.transform = 'rotate(0) scale(1)';
-    }, 100);
-}
-
-// Анимация улучшения
-function animateUpgrade(upgradeId) {
-    const element = elements.upgrades[upgradeId].element;
-    element.style.transform = 'scale(1.05)';
-    element.style.boxShadow = '0 0 15px #4bd5ff';
     
-    setTimeout(() => {
-        element.style.transform = 'scale(1)';
-        element.style.boxShadow = 'none';
-    }, 200);
+    // Update level
+    const totalUpgrades = game.upgrades.reduce((sum, u) => sum + u.count, 0);
+    elements.jediLevel.textContent = `(Уровень ${Math.floor(totalUpgrades / 3) + 1})`;
 }
 
-// Запуск игры при загрузке
-window.addEventListener('load', initGame);
+// Save/Load
+function saveGame() {
+    localStorage.setItem('swClickerSave', JSON.stringify(game));
+}
+
+function loadGame() {
+    const saved = localStorage.getItem('swClickerSave');
+    if (saved) {
+        try {
+            const data = JSON.parse(saved);
+            Object.assign(game, data);
+            game.creditsPerSecond = game.upgrades.reduce((sum, u) => sum + (u.count * u.power), 0);
+        } catch (e) {
+            console.error('Failed to load save', e);
+        }
+    }
+}
+
+// Start Game
+window.addEventListener('DOMContentLoaded', init);
