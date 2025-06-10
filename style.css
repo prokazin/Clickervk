@@ -1,90 +1,148 @@
+/* Базовые настройки */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Arial', sans-serif;
-    background: #000 url('assets/star-wars-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
+    background: #000 url('assets/bg.jpg') no-repeat center/cover;
     color: #ffe81f;
     text-align: center;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     height: 100vh;
     overflow: hidden;
+    touch-action: manipulation;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #4bd5ff;
     border-radius: 15px;
-    box-shadow: 0 0 20px rgba(255, 232, 31, 0.3);
+    box-shadow: 0 0 20px rgba(75, 213, 255, 0.5);
 }
 
 h1 {
-    font-size: 2.5em;
-    text-shadow: 0 0 10px #ff0;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    text-shadow: 0 0 10px #4bd5ff;
+    margin: 0 0 15px;
 }
 
 .force {
-    font-size: 1.8em;
-    margin: 20px 0;
+    font-size: 1.5rem;
+    margin: 15px 0;
     color: #4bd5ff;
     text-shadow: 0 0 5px #4bd5ff;
 }
 
+/* Кнопка меча */
 #click-btn {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     color: #ffe81f;
     border: 2px solid #4bd5ff;
-    border-radius: 10px;
-    padding: 15px 25px;
-    font-size: 1.2em;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.2s;
-    margin: 20px 0;
-    width: 200px;
-}
-
-#click-btn:hover {
-    background: rgba(75, 213, 255, 0.1);
-    box-shadow: 0 0 15px #4bd5ff;
+    transition: all 0.1s;
+    margin: 15px auto;
+    width: 100%;
+    max-width: 220px;
+    display: block;
 }
 
 .lightsaber-img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     transition: transform 0.1s;
     filter: drop-shadow(0 0 8px #4bd5ff);
+    margin-bottom: 5px;
 }
 
 #click-btn:active .lightsaber-img {
     transform: rotate(30deg) scale(1.1);
 }
 
+/* Блок улучшений */
 .upgrades {
-    margin-top: 30px;
+    margin-top: 25px;
+}
+
+.upgrades h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #4bd5ff;
+}
+
+#jedi-level {
+    font-size: 0.9rem;
+    color: #ffe81f;
 }
 
 .upgrade {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
     color: #fff;
     border: 1px solid #ffe81f;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 12px;
-    margin: 10px 0;
+    margin: 8px 0;
     cursor: pointer;
     width: 100%;
+    text-align: left;
     transition: all 0.2s;
 }
 
 .upgrade:hover {
     background: rgba(255, 232, 31, 0.1);
-    box-shadow: 0 0 10px #ffe81f;
+}
+
+.upgrade-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.upgrade-name {
+    color: #4bd5ff;
+}
+
+.upgrade-count {
+    color: #ffe81f;
+}
+
+.upgrade-info {
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .cost {
-    font-size: 0.9em;
-    color: #aaa;
-    display: block;
-    margin-top: 5px;
+    color: #ff5555;
+}
+
+/* Адаптив для мобилок */
+@media (max-width: 500px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .force {
+        font-size: 1.2rem;
+    }
+    
+    .lightsaber-img {
+        width: 60px;
+        height: 60px;
+    }
 }
