@@ -2,47 +2,18 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Wars Clicker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars Clicker | VK</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preload" href="assets/lightsaber.webp" as="image">
 </head>
 <body>
-    <div class="container">
-        <h1>Lightsaber Clicker</h1>
-        <div class="force">⚡ Сила: <span id="credits">0</span></div>
-        
-        <button id="click-btn" aria-label="Ударить мечом">
-            <img src="assets/lightsaber.webp" alt="" width="80" height="80" class="lightsaber-img" loading="eager">
-            <span class="click-text">Ударить мечом</span>
-        </button>
-        
+    <div class="game-container">
+        <div class="score">Очки: <span id="points">0</span></div>
+        <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
         <div class="upgrades">
-            <h2>Улучшения <span id="jedi-level">(Уровень 1)</span></h2>
-            
-            <div class="upgrade" id="upgrade1" role="button" tabindex="0">
-                <div class="upgrade-header">
-                    <span class="upgrade-name">Джедай-падаван</span>
-                    <span class="upgrade-count" id="upgrade1-count">0</span>
-                </div>
-                <div class="upgrade-info">
-                    +<span id="upgrade1-power">1</span> силы/сек
-                    <span class="cost">Цена: <span id="upgrade1-cost">10</span></span>
-                </div>
-            </div>
-            
-            <div class="upgrade" id="upgrade2" role="button" tabindex="0">
-                <div class="upgrade-header">
-                    <span class="upgrade-name">Ситх-адепт</span>
-                    <span class="upgrade-count" id="upgrade2-count">0</span>
-                </div>
-                <div class="upgrade-info">
-                    +<span id="upgrade2-power">5</span> силы/сек
-                    <span class="cost">Цена: <span id="upgrade2-cost">50</span></span>
-                </div>
-            </div>
+            <button id="auto-clicker">Купить дроида-кликера (50 очков)</button>
         </div>
     </div>
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
