@@ -1,112 +1,81 @@
 // Игровые переменные
 let points = 0;
-let clickPower = 1;
-let autoPower = 0;
+let upgrades = {
+    click: { level: 0, power: 0 },
+    auto: { level: 0, power: 0 },
+    critical: { level: 0, power: 0 }
+};
 let comboActive = false;
-let criticalChance = 0;
+let comboCooldown = false;
 
-// Элементы UI
-const pointsElement = document.getElementById('points');
-const lightsaber = document.getElementById('lightsaber');
-
-// Инициализация сохранения
+// Инициализация
 loadGame();
-
-// Табы
-const tabs = document.querySelectorAll('.tab-button');
-const tabContents = document.querySelectorAll('.tab-content');
-
-tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tabContents.forEach(c => c.classList.remove('active'));
-        
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-    });
-});
+updateUI();
 
 // Клик по мечу
-lightsaber.addEventListener('click', () => {
-    let earned = clickPower;
+document.getElementById('lightsaber').addEventListener('click', handleClick);
+
+// Автокликер
+setInterval(autoClick, 1000);
+
+// Обработка клика
+function handleClick() {
+    let earned = 1 + upgrades.click.power;
     
-    // Критический удар
-    if (Math.random() * 100 < criticalChance) {
+    if (Math.random() * 100 < upgrades.critical.power) {
         earned *= 3;
-        showFloatingText("КРИТ! +" + earned, lightsaber);
-    } else {
-        showFloatingText("+" + earned, lightsaber);
+        showFloatingText("КРИТ! +" + earned, this);
     }
     
-    // Комбо
     if (comboActive) earned *= 2;
     
     points += earned;
-    updatePoints();
-    animateLightsaber();
+    updateUI();
+    animateClick(this);
     saveGame();
-});
+}
 
-// Автокликер
-setInterval(() => {
-    if (autoPower > 0) {
-        points += autoPower;
-        updatePoints();
+// Автоклик
+function autoClick() {
+    if (upgrades.auto.power > 0) {
+        points += upgrades.auto.power;
+        updateUI();
         saveGame();
     }
-}, 1000);
+}
 
 // Покупка улучшений
 document.querySelectorAll('.upgrade-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const cost = parseInt(btn.dataset.cost);
+    btn.addEventListener('click', function() {
+        const type = this.dataset.type;
+        const cost = parseInt(this.querySelector('.cost').textContent);
         
         if (points >= cost) {
             points -= cost;
-            updatePoints();
             
-            if (btn.dataset.power) {
-                clickPower += parseInt(btn.dataset.power);
-                btn.textContent = `Улучшено! (+${btn.dataset.power}/клик)`;
-            } else if (btn.dataset.type === 'auto') {
-                autoPower += parseInt(btn.dataset.type === 'auto' ? 1 : 5);
-                btn.textContent = `Активно! (+${btn.dataset.type === 'auto' ? 1 : 5}/сек)`;
-            } else if (btn.dataset.type === 'combo') {
+            if (type === 'click' || type === 'auto') {
+                const level = parseInt(this.dataset.level);
+                upgrades[type].level = level;
+                upgrades[type].power = parseInt(this.dataset.power);
+                this.disabled = true;
+            } 
+            else if (type === 'combo' && !comboCooldown) {
                 activateCombo();
-                btn.textContent = "Активно! (10 сек)";
-                setTimeout(() => {
-                    btn.textContent = `Комбо x2 (10 сек)`;
-                }, 10000);
-            } else if (btn.dataset.type === 'critical') {
-                criticalChance += 20;
-                btn.textContent = `Улучшено! (${criticalChance}% шанс)`;
+                startCooldown(this);
+            }
+            else if (type === 'critical') {
+                upgrades.critical.power += parseInt(this.dataset.power);
+                this.querySelector('.power').textContent = upgrades.critical.power;
+                if (upgrades.critical.power >= 50) this.disabled = true;
             }
             
-            btn.disabled = true;
+            updateUI();
             saveGame();
         }
     });
 });
 
-// Анимации и вспомогательные функции
-function animateLightsaber() {
-    lightsaber.style.transform = 'rotate(30deg)';
-    setTimeout(() => {
-        lightsaber.style.transform = 'rotate(0)';
-    }, 100);
-}
-
-function showFloatingText(text, parent) {
-    const floatingText = document.createElement('div');
-    floatingText.textContent = text;
-    floatingText.className = 'floating-text';
-    parent.appendChild(floatingText);
-    
-    setTimeout(() => {
-        floatingText.remove();
-    }, 1000);
-}
-
+// Активация комбо
 function activateCombo() {
     comboActive = true;
     setTimeout(() => {
@@ -114,47 +83,89 @@ function activateCombo() {
     }, 10000);
 }
 
-function updatePoints() {
-    pointsElement.textContent = points;
-}
-
-// Сохранение игры
-function saveGame() {
-    const gameData = {
-        points,
-        clickPower,
-        autoPower,
-        criticalChance
-    };
-    localStorage.setItem('starWarsClickerSave', JSON.stringify(gameData));
-}
-
-// Загрузка игры
-function loadGame() {
-    const savedData = localStorage.getItem('starWarsClickerSave');
-    if (savedData) {
-        const gameData = JSON.parse(savedData);
-        points = gameData.points || 0;
-        clickPower = gameData.clickPower || 1;
-        autoPower = gameData.autoPower || 0;
-        criticalChance = gameData.criticalChance || 0;
-        updatePoints();
+// КД для комбо
+function startCooldown(btn) {
+    comboCooldown = true;
+    let timeLeft = 30;
+    const cooldownBar = btn.parentElement.querySelector('.cooldown');
+    
+    const interval = setInterval(() => {
+        timeLeft--;
+        cooldownBar.style.width = (timeLeft/30)*100 + '%';
         
-        // Обновляем кнопки улучшений
-        document.querySelectorAll('.upgrade-btn').forEach(btn => {
-            if (btn.dataset.power && clickPower > 1) {
-                btn.disabled = true;
-                btn.textContent = `Улучшено! (+${btn.dataset.power}/клик)`;
-            } else if (btn.dataset.type === 'auto' && autoPower > 0) {
-                btn.disabled = true;
-                btn.textContent = `Активно! (+${autoPower}/сек)`;
-            } else if (btn.dataset.type === 'critical' && criticalChance >= 20) {
-                btn.disabled = true;
-                btn.textContent = `Улучшено! (${criticalChance}% шанс)`;
-            }
-        });
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            comboCooldown = false;
+            btn.disabled = false;
+            cooldownBar.style.width = '0%';
+        }
+    }, 1000);
+}
+
+// Обновление интерфейса
+function updateUI() {
+    document.getElementById('points').textContent = points;
+    
+    document.querySelectorAll('.upgrade-btn').forEach(btn => {
+        const type = btn.dataset.type;
+        const cost = btn.querySelector('.cost');
+        
+        if (cost) {
+            const baseCost = parseInt(btn.dataset.baseCost);
+            cost.textContent = baseCost + (upgrades[type]?.level || 0) * 50;
+        }
+        
+        btn.disabled = points < parseInt(btn.querySelector('.cost')?.textContent || '999999');
+    });
+}
+
+// Анимации
+function animateClick(element) {
+    element.classList.add('pulse');
+    setTimeout(() => {
+        element.classList.remove('pulse');
+    }, 300);
+}
+
+function showFloatingText(text, parent) {
+    const floatText = document.createElement('div');
+    floatText.className = 'floating-text';
+    floatText.textContent = text;
+    parent.appendChild(floatText);
+    
+    setTimeout(() => {
+        floatText.remove();
+    }, 1000);
+}
+
+// Сохранение/загрузка
+function saveGame() {
+    localStorage.setItem('swClickerSave', JSON.stringify({
+        points,
+        upgrades
+    }));
+}
+
+function loadGame() {
+    const saved = localStorage.getItem('swClickerSave');
+    if (saved) {
+        const data = JSON.parse(saved);
+        points = data.points || 0;
+        upgrades = data.upgrades || {
+            click: { level: 0, power: 0 },
+            auto: { level: 0, power: 0 },
+            critical: { level: 0, power: 0 }
+        };
     }
 }
 
-// Включить сохранение каждые 5 секунд на всякий случай
-setInterval(saveGame, 5000);
+// Переключение табов
+document.querySelectorAll('.tab-button').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
