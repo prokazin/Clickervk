@@ -8,10 +8,34 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="score">Очки: <span id="points">0</span></div>
-        <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
-        <div class="upgrades">
-            <button id="auto-clicker">Купить дроида-кликера (50 очков)</button>
+        <div class="score">Очки Силы: <span id="points">0</span></div>
+        
+        <!-- Основной кликер -->
+        <div class="clicker-section">
+            <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
+        </div>
+
+        <!-- Табы улучшений -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="click">Клик</button>
+            <button class="tab-button" data-tab="auto">Автоматизация</button>
+            <button class="tab-button" data-tab="bonus">Бонусы</button>
+        </div>
+
+        <!-- Контент табов -->
+        <div id="click" class="tab-content active">
+            <button class="upgrade-btn" data-cost="100" data-power="1">Улучшить меч (+1/клик)</button>
+            <button class="upgrade-btn" data-cost="500" data-power="5">Форма V (+5/клик)</button>
+        </div>
+
+        <div id="auto" class="tab-content">
+            <button class="upgrade-btn" data-cost="200" data-type="auto">Дроид-кликер (+1/сек)</button>
+            <button class="upgrade-btn" data-cost="1000" data-type="auto">Флот дроидов (+5/сек)</button>
+        </div>
+
+        <div id="bonus" class="tab-content">
+            <button class="upgrade-btn" data-cost="300" data-type="combo">Комбо x2 (10 сек)</button>
+            <button class="upgrade-btn" data-cost="1500" data-type="critical">Крит. удар (20%)</button>
         </div>
     </div>
     <script src="script.js"></script>
