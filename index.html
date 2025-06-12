@@ -2,40 +2,67 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Wars Clicker | VK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Star Wars Clicker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
         <div class="score">Очки Силы: <span id="points">0</span></div>
         
-        <!-- Основной кликер -->
         <div class="clicker-section">
             <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
         </div>
 
-        <!-- Табы улучшений -->
         <div class="tabs">
             <button class="tab-button active" data-tab="click">Клик</button>
-            <button class="tab-button" data-tab="auto">Автоматизация</button>
+            <button class="tab-button" data-tab="auto">Авто</button>
             <button class="tab-button" data-tab="bonus">Бонусы</button>
         </div>
 
-        <!-- Контент табов -->
         <div id="click" class="tab-content active">
-            <button class="upgrade-btn" data-cost="100" data-power="1">Улучшить меч (+1/клик)</button>
-            <button class="upgrade-btn" data-cost="500" data-power="5">Форма V (+5/клик)</button>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="click" data-level="1" data-base-cost="50" data-power="1">
+                    Уровень <span class="level">1</span>: +1/клик (<span class="cost">50</span>)
+                </button>
+                <div class="progress-bar"><div class="progress"></div></div>
+            </div>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="click" data-level="2" data-base-cost="150" data-power="3">
+                    Уровень <span class="level">2</span>: +3/клик (<span class="cost">150</span>)
+                </button>
+                <div class="progress-bar"><div class="progress"></div></div>
+            </div>
         </div>
 
         <div id="auto" class="tab-content">
-            <button class="upgrade-btn" data-cost="200" data-type="auto">Дроид-кликер (+1/сек)</button>
-            <button class="upgrade-btn" data-cost="1000" data-type="auto">Флот дроидов (+5/сек)</button>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="auto" data-level="1" data-base-cost="100" data-power="1">
+                    Дроид-кликер: +1/сек (<span class="cost">100</span>)
+                </button>
+                <div class="progress-bar"><div class="progress"></div></div>
+            </div>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="auto" data-level="2" data-base-cost="400" data-power="3">
+                    Флот дроидов: +3/сек (<span class="cost">400</span>)
+                </button>
+                <div class="progress-bar"><div class="progress"></div></div>
+            </div>
         </div>
 
         <div id="bonus" class="tab-content">
-            <button class="upgrade-btn" data-cost="300" data-type="combo">Комбо x2 (10 сек)</button>
-            <button class="upgrade-btn" data-cost="1500" data-type="critical">Крит. удар (20%)</button>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="combo" data-base-cost="200">
+                    Комбо x2 (10 сек) (<span class="cost">200</span>)
+                </button>
+                <div class="cooldown-bar"><div class="cooldown"></div></div>
+            </div>
+            <div class="upgrade-item">
+                <button class="upgrade-btn" data-type="critical" data-base-cost="500" data-power="10">
+                    Крит. удар +<span class="power">10</span>% (<span class="cost">500</span>)
+                </button>
+                <div class="progress-bar"><div class="progress"></div></div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
