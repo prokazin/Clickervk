@@ -4,125 +4,119 @@ let clickPower = 1;
 let autoPower = 0;
 let criticalChance = 0;
 
-// Коэффициент роста цен
-const PRICE_INCREASE_RATE = 1.3;
-
 // Инициализация игры
-loadGame();
-updateUI();
-setupTabs();
+function initGame() {
+    loadGame();
+    setupEventListeners();
+    startAutoClicker();
+    updateUI();
+}
 
-// Автокликер
-setInterval(() => {
-    points += autoPower;
-    updatePoints();
-    checkUpgrades();
-    saveGame();
-}, 1000);
-
-// Настройка вкладок
-function setupTabs() {
-    document.querySelectorAll('.tab-button').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            this.classList.add('active');
-            const tabId = this.dataset.tab;
-            document.getElementById(tabId).classList.add('active');
+// Настройка обработчиков событий
+function setupEventListeners() {
+    // Клик по мечу
+    document.getElementById('clicker-area').addEventListener('click', function(e) {
+        handleClick(e);
+    });
+    
+    // Переключение вкладок
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function() {
+            switchTab(this.dataset.tab);
+        });
+    });
+    
+    // Покупка улучшений
+    document.querySelectorAll('.upgrade').forEach(upgrade => {
+        upgrade.addEventListener('click', function() {
+            buyUpgrade(this);
         });
     });
 }
 
-// Клик по мечу
-document.getElementById('lightsaber').addEventListener('click', function(e) {
-    // Анимация
-    this.classList.add('click-animation');
-    setTimeout(() => this.classList.remove('click-animation'), 200);
+// Обработка клика
+function handleClick(event) {
+    const clicker = document.querySelector('#clicker-area img');
+    clicker.classList.add('click-animation');
+    setTimeout(() => clicker.classList.remove('click-animation'), 200);
     
-    // Расчет полученных очков
     let earned = clickPower;
+    const isCritical = Math.random() * 100 < criticalChance;
     
-    // Критический удар
-    if (Math.random() * 100 < criticalChance) {
+    if (isCritical) {
         earned *= 3;
-        showFloatingText("КРИТ! +" + earned, e.clientX, e.clientY);
+        showFloatingText(`КРИТ! +${earned}`, event.clientX, event.clientY);
     } else {
-        showFloatingText("+" + earned, e.clientX, e.clientY);
+        showFloatingText(`+${earned}`, event.clientX, event.clientY);
     }
     
     points += earned;
-    updatePoints();
-    checkUpgrades();
+    updateUI();
     saveGame();
-});
-
-// Проверка доступных улучшений
-function checkUpgrades() {
-    document.querySelectorAll('.upgrade').forEach(upgrade => {
-        const type = upgrade.dataset.type;
-        const level = parseInt(upgrade.querySelector('.upgrade-level span').textContent);
-        const baseCost = parseInt(upgrade.dataset.baseCost);
-        const cost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, level - 1));
-        
-        if (points >= cost) {
-            upgrade.classList.add('active');
-        } else {
-            upgrade.classList.remove('active');
-        }
-    });
 }
 
-// Покупка улучшения (при клике)
-document.querySelectorAll('.upgrade').forEach(upgrade => {
-    upgrade.addEventListener('click', function() {
-        if (!this.classList.contains('active')) return;
-        
-        const type = this.dataset.type;
-        const level = parseInt(this.querySelector('.upgrade-level span').textContent);
-        const baseCost = parseInt(this.dataset.baseCost);
-        const power = parseInt(this.dataset.power);
-        const cost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, level - 1));
-        
-        if (points >= cost) {
-            points -= cost;
-            
-            // Улучшение характеристик
-            if (type === 'click') {
-                clickPower += power;
-            } else if (type === 'auto') {
-                autoPower += power;
-            } else if (type === 'critical') {
-                criticalChance += power;
-            }
-            
-            // Увеличение уровня
-            const newLevel = level + 1;
-            this.querySelector('.upgrade-level span').textContent = newLevel;
-            
-            // Обновление цены
-            const newCost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, newLevel - 1));
-            this.querySelector('.upgrade-cost span').textContent = newCost;
-            
-            // Сброс анимации
-            this.classList.remove('active');
-            
+// Автокликер
+function startAutoClicker() {
+    setInterval(() => {
+        if (autoPower > 0) {
+            points += autoPower;
             updateUI();
             saveGame();
         }
+    }, 1000);
+}
+
+// Покупка улучшения
+function buyUpgrade(element) {
+    const type = element.dataset.type;
+    const level = parseInt(element.dataset.level);
+    const baseCost = parseInt(element.dataset.baseCost);
+    const power = parseInt(element.dataset.power);
+    const cost = Math.floor(baseCost * Math.pow(1.3, level - 1));
+    
+    if (points >= cost) {
+        points -= cost;
+        element.dataset.level = level + 1;
+        
+        switch(type) {
+            case 'click': clickPower += power; break;
+            case 'auto': autoPower += power; break;
+            case 'critical': criticalChance += power; break;
+        }
+        
+        updateUI();
+        saveGame();
+    }
+}
+
+// Переключение вкладок
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
     });
-});
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
 
 // Обновление интерфейса
-function updatePoints() {
+function updateUI() {
     document.getElementById('points').textContent = Math.floor(points);
     document.getElementById('click-power').textContent = clickPower;
     document.getElementById('auto-power').textContent = autoPower;
-}
-
-function updateUI() {
-    updatePoints();
-    checkUpgrades();
+    
+    document.querySelectorAll('.upgrade').forEach(upgrade => {
+        const type = upgrade.dataset.type;
+        const level = parseInt(upgrade.dataset.level);
+        const baseCost = parseInt(upgrade.dataset.baseCost);
+        const cost = Math.floor(baseCost * Math.pow(1.3, level - 1));
+        
+        upgrade.querySelector('.upgrade-cost span').textContent = cost;
+        upgrade.classList.toggle('active', points >= cost);
+    });
 }
 
 // Всплывающий текст
@@ -134,32 +128,26 @@ function showFloatingText(text, x, y) {
     floatText.style.top = `${y}px`;
     document.body.appendChild(floatText);
     
-    setTimeout(() => {
-        floatText.remove();
-    }, 1000);
+    setTimeout(() => floatText.remove(), 1000);
 }
 
-// Сохранение и загрузка
+// Сохранение игры
 function saveGame() {
     const gameData = {
         points,
         clickPower,
         autoPower,
         criticalChance,
-        upgrades: []
-    };
-    
-    document.querySelectorAll('.upgrade').forEach(upgrade => {
-        gameData.upgrades.push({
+        upgrades: Array.from(document.querySelectorAll('.upgrade')).map(upgrade => ({
             type: upgrade.dataset.type,
-            level: parseInt(upgrade.querySelector('.upgrade-level span').textContent),
+            level: parseInt(upgrade.dataset.level),
             baseCost: parseInt(upgrade.dataset.baseCost)
-        });
-    });
-    
+        }))
+    };
     localStorage.setItem('swClickerSave', JSON.stringify(gameData));
 }
 
+// Загрузка игры
 function loadGame() {
     const savedData = localStorage.getItem('swClickerSave');
     if (savedData) {
@@ -169,15 +157,14 @@ function loadGame() {
         autoPower = data.autoPower || 0;
         criticalChance = data.criticalChance || 0;
         
-        if (data.upgrades) {
-            data.upgrades.forEach(upgrade => {
-                const element = document.querySelector(`.upgrade[data-type="${upgrade.type}"]`);
-                if (element) {
-                    element.querySelector('.upgrade-level span').textContent = upgrade.level || 1;
-                    const newCost = Math.floor(upgrade.baseCost * Math.pow(PRICE_INCREASE_RATE, (upgrade.level || 1) - 1));
-                    element.querySelector('.upgrade-cost span').textContent = newCost;
-                }
-            });
-        }
+        data.upgrades?.forEach(upgradeData => {
+            const upgrade = document.querySelector(`.upgrade[data-type="${upgradeData.type}"]`);
+            if (upgrade) {
+                upgrade.dataset.level = upgradeData.level || 1;
+            }
+        });
     }
 }
+
+// Запуск игры
+initGame();
