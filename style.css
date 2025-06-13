@@ -38,13 +38,14 @@ body {
 .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 5px;
-    font-size: 14px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 0 5px;
 }
 
 .stats {
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 
 .clicker-section {
@@ -52,20 +53,29 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100px;
+    min-height: 150px;
+    margin-bottom: 10px;
 }
 
 #lightsaber {
-    width: 120px;
+    width: 150px;
     height: auto;
     cursor: pointer;
     transition: transform 0.1s;
     filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8));
 }
 
+.tabs-container {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid yellow;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: auto;
+}
+
 .tabs {
     display: flex;
-    margin: 5px 0;
+    margin-bottom: 5px;
 }
 
 .tab-button {
@@ -75,7 +85,8 @@ body {
     border: 1px solid yellow;
     color: yellow;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
+    z-index: 1;
 }
 
 .tab-button.active {
@@ -86,8 +97,7 @@ body {
 
 .tab-content {
     display: none;
-    max-height: 120px;
-    overflow-y: auto;
+    padding: 5px;
 }
 
 .tab-content.active {
@@ -100,9 +110,8 @@ body {
     border-radius: 5px;
     padding: 8px;
     margin-bottom: 5px;
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .upgrade-info {
@@ -118,7 +127,7 @@ body {
 
 .upgrade-effect {
     color: #0f0;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .upgrade.active {
@@ -145,7 +154,7 @@ body {
     position: absolute;
     color: yellow;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
     pointer-events: none;
     animation: float 1s forwards;
     text-shadow: 0 0 2px black;
@@ -155,4 +164,25 @@ body {
 @keyframes float {
     0% { transform: translateY(0); opacity: 1; }
     100% { transform: translateY(-40px); opacity: 0; }
+}
+
+/* Оптимизация для маленьких экранов */
+@media (max-height: 600px) {
+    .header {
+        font-size: 14px;
+    }
+    
+    #lightsaber {
+        width: 120px;
+    }
+    
+    .tab-button {
+        padding: 6px 0;
+        font-size: 12px;
+    }
+    
+    .upgrade {
+        padding: 6px;
+        font-size: 12px;
+    }
 }
