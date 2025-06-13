@@ -48,29 +48,13 @@ body {
     gap: 15px;
 }
 
-.clicker-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 150px;
-    margin-bottom: 10px;
-}
-
-#lightsaber {
-    width: 150px;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.1s;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8));
-}
-
 .tabs-container {
     background: rgba(0, 0, 0, 0.7);
     border: 1px solid yellow;
     border-radius: 10px;
     padding: 5px;
-    margin-top: auto;
+    margin-bottom: 10px;
+    order: 1;
 }
 
 .tabs {
@@ -135,6 +119,23 @@ body {
     animation: pulse 0.5s infinite alternate;
 }
 
+.clicker-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+    order: 2;
+}
+
+#lightsaber {
+    width: 150px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.1s;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8));
+}
+
 @keyframes click {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(15deg) scale(0.95); }
@@ -184,5 +185,9 @@ body {
     .upgrade {
         padding: 6px;
         font-size: 12px;
+    }
+    
+    .tabs-container {
+        margin-bottom: 5px;
     }
 }
