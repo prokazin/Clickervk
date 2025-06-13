@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="background"></div>
+    
     <div class="game-container">
         <div class="score">Очки Силы: <span id="points">0</span></div>
         
@@ -23,48 +25,31 @@
         <div id="click" class="tab-content active">
             <div class="upgrade-item">
                 <button class="upgrade-btn" data-type="click" data-level="1" data-base-cost="50" data-power="1">
-                    Уровень <span class="level">1</span>: +1/клик (<span class="cost">50</span>)
+                    Уровень <span class="level">1</span>: +<span class="power-value">1</span>/клик 
+                    (<span class="cost">50</span>)
                 </button>
-                <div class="progress-bar"><div class="progress"></div></div>
-            </div>
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="click" data-level="2" data-base-cost="150" data-power="3">
-                    Уровень <span class="level">2</span>: +3/клик (<span class="cost">150</span>)
-                </button>
-                <div class="progress-bar"><div class="progress"></div></div>
             </div>
         </div>
 
         <div id="auto" class="tab-content">
             <div class="upgrade-item">
                 <button class="upgrade-btn" data-type="auto" data-level="1" data-base-cost="100" data-power="1">
-                    Дроид-кликер: +1/сек (<span class="cost">100</span>)
+                    Дроид-кликер: +<span class="power-value">1</span>/сек 
+                    (<span class="cost">100</span>)
                 </button>
-                <div class="progress-bar"><div class="progress"></div></div>
-            </div>
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="auto" data-level="2" data-base-cost="400" data-power="3">
-                    Флот дроидов: +3/сек (<span class="cost">400</span>)
-                </button>
-                <div class="progress-bar"><div class="progress"></div></div>
             </div>
         </div>
 
         <div id="bonus" class="tab-content">
             <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="combo" data-base-cost="200">
-                    Комбо x2 (10 сек) (<span class="cost">200</span>)
+                <button class="upgrade-btn" data-type="critical" data-level="1" data-base-cost="200" data-power="5">
+                    Крит. удар +<span class="power-value">5</span>% 
+                    (<span class="cost">200</span>)
                 </button>
-                <div class="cooldown-bar"><div class="cooldown"></div></div>
-            </div>
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="critical" data-base-cost="500" data-power="10">
-                    Крит. удар +<span class="power">10</span>% (<span class="cost">500</span>)
-                </button>
-                <div class="progress-bar"><div class="progress"></div></div>
             </div>
         </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
