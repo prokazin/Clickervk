@@ -1,59 +1,28 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Wars Clicker</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Экономический бот | VK App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/vk-io@4.0.0/dist/vk-io.min.js"></script>
 </head>
 <body>
-    <div class="background"></div>
-    
-    <div class="game-container">
-        <div class="header">
-            <div class="score">Сила: <span id="points">0</span></div>
-            <div class="stats">
-                <div>+<span id="click-power">1</span>/клик</div>
-                <div>+<span id="auto-power">0</span>/сек</div>
-            </div>
-        </div>
-        
-        <!-- Основной кликабельный меч -->
-        <div class="clicker-section" id="clicker-area">
-            <img src="assets/lightsaber.png" alt="Световой меч">
-        </div>
-
-        <!-- Контейнер с улучшениями -->
-        <div class="upgrades-panel">
-            <div class="tabs">
-                <button class="tab-button active" data-tab="click">Клик</button>
-                <button class="tab-button" data-tab="auto">Авто</button>
-                <button class="tab-button" data-tab="bonus">Бонусы</button>
-            </div>
-
-            <div class="tab-content active" id="click">
-                <div class="upgrade" data-type="click" data-level="1" data-base-cost="50" data-power="1">
-                    <div class="upgrade-name">Улучшение меча</div>
-                    <div class="upgrade-cost">Цена: <span>50</span></div>
-                </div>
-            </div>
-
-            <div class="tab-content" id="auto">
-                <div class="upgrade" data-type="auto" data-level="1" data-base-cost="100" data-power="1">
-                    <div class="upgrade-name">Дроиды</div>
-                    <div class="upgrade-cost">Цена: <span>100</span></div>
-                </div>
-            </div>
-
-            <div class="tab-content" id="bonus">
-                <div class="upgrade" data-type="critical" data-level="1" data-base-cost="200" data-power="5">
-                    <div class="upgrade-name">Крит. удар</div>
-                    <div class="upgrade-cost">Цена: <span>200</span></div>
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <h1>💰 Экономический бот</h1>
+    <div id="user-info">
+      <p>Загрузка данных...</p>
     </div>
-    
-    <script src="script.js"></script>
+    <div class="actions">
+      <button onclick="getDailyBonus()">🎁 Ежедневный бонус</button>
+      <button onclick="showClanMenu()">⚔️ Кланы</button>
+    </div>
+    <div id="clan-menu" class="hidden">
+      <h2>Кланы</h2>
+      <input type="text" id="clan-name" placeholder="Название клана">
+      <button onclick="createClan()">Создать клан</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
