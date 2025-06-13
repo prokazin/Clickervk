@@ -22,37 +22,42 @@
             <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
         </div>
 
-        <div class="upgrades-container">
-            <div class="upgrades-column">
-                <div class="upgrade" data-type="click">
-                    <div class="upgrade-name">Меч</div>
-                    <div class="upgrade-level">Ур.<span>1</span></div>
-                    <div class="upgrade-cost"><span>50</span></div>
-                    <div class="upgrade-effect">+1/клик</div>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="click">Клик</button>
+            <button class="tab-button" data-tab="auto">Авто</button>
+            <button class="tab-button" data-tab="bonus">Бонусы</button>
+        </div>
+
+        <div id="click" class="tab-content active">
+            <div class="upgrade" data-type="click" data-level="1" data-base-cost="50" data-power="1">
+                <div class="upgrade-info">
+                    <div class="upgrade-name">Улучшение меча</div>
+                    <div class="upgrade-level">Ур. <span>1</span></div>
                 </div>
-                
-                <div class="upgrade" data-type="auto">
-                    <div class="upgrade-name">Дроиды</div>
-                    <div class="upgrade-level">Ур.<span>1</span></div>
-                    <div class="upgrade-cost"><span>100</span></div>
-                    <div class="upgrade-effect">+1/сек</div>
-                </div>
+                <div class="upgrade-cost">Цена: <span>50</span></div>
+                <div class="upgrade-effect">+1/клик</div>
             </div>
-            
-            <div class="upgrades-column">
-                <div class="upgrade" data-type="critical">
-                    <div class="upgrade-name">Криты</div>
-                    <div class="upgrade-level">Ур.<span>1</span></div>
-                    <div class="upgrade-cost"><span>200</span></div>
-                    <div class="upgrade-effect">+5%</div>
+        </div>
+
+        <div id="auto" class="tab-content">
+            <div class="upgrade" data-type="auto" data-level="1" data-base-cost="100" data-power="1">
+                <div class="upgrade-info">
+                    <div class="upgrade-name">Дроиды</div>
+                    <div class="upgrade-level">Ур. <span>1</span></div>
                 </div>
-                
-                <div class="upgrade" data-type="combo">
-                    <div class="upgrade-name">Комбо</div>
-                    <div class="upgrade-level">Ур.<span>1</span></div>
-                    <div class="upgrade-cost"><span>300</span></div>
-                    <div class="upgrade-effect">x2 на 10с</div>
+                <div class="upgrade-cost">Цена: <span>100</span></div>
+                <div class="upgrade-effect">+1/сек</div>
+            </div>
+        </div>
+
+        <div id="bonus" class="tab-content">
+            <div class="upgrade" data-type="critical" data-level="1" data-base-cost="200" data-power="5">
+                <div class="upgrade-info">
+                    <div class="upgrade-name">Крит. удар</div>
+                    <div class="upgrade-level">Ур. <span>1</span></div>
                 </div>
+                <div class="upgrade-cost">Цена: <span>200</span></div>
+                <div class="upgrade-effect">+5%</div>
             </div>
         </div>
     </div>
