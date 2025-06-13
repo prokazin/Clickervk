@@ -10,6 +10,7 @@ body {
     overflow: hidden;
     font-family: 'Arial', sans-serif;
     height: 100vh;
+    color: yellow;
 }
 
 .background {
@@ -29,16 +30,25 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }
 
 .score {
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
-    color: yellow;
-    text-align: center;
-    margin-bottom: 10px;
-    text-shadow: 0 0 5px yellow;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stats {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
 }
 
 .clicker-section {
@@ -46,67 +56,56 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 150px;
 }
 
 #lightsaber {
-    width: min(80%, 300px);
+    width: min(70%, 250px);
     cursor: pointer;
     transition: transform 0.1s;
     filter: drop-shadow(0 0 15px rgba(255, 255, 0, 0.8));
 }
 
-.tabs {
-    display: flex;
-    margin: 10px 0;
+.upgrades-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 5px;
 }
 
-.tab-button {
-    flex: 1;
-    padding: 10px 5px;
-    background: rgba(0, 0, 0, 0.7);
+.upgrade {
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid yellow;
-    color: yellow;
-    cursor: pointer;
-    font-size: clamp(0.7rem, 3vw, 0.9rem);
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
-.tab-button.active {
-    background: yellow;
-    color: black;
+.upgrade-name {
     font-weight: bold;
+    margin-bottom: 3px;
 }
 
-.tab-content {
-    display: none;
-    max-height: 30vh;
-    overflow-y: auto;
+.upgrade-level {
+    color: #ccc;
+    margin-bottom: 3px;
 }
 
-.tab-content.active {
-    display: block;
+.upgrade-cost {
+    color: #ff0;
+    margin-bottom: 3px;
 }
 
-.upgrade-item {
-    margin-bottom: 8px;
+.upgrade-effect {
+    color: #0f0;
 }
 
-.upgrade-btn {
-    width: 100%;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid yellow;
-    color: yellow;
-    cursor: pointer;
-    font-size: clamp(0.7rem, 3vw, 0.9rem);
-    text-align: left;
+.upgrade.active {
+    background: rgba(255, 255, 0, 0.2);
+    border-color: #ff0;
 }
 
-.upgrade-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Анимации */
 @keyframes click {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(15deg) scale(0.95); }
@@ -132,13 +131,13 @@ body {
     text-shadow: 0 0 3px black;
 }
 
-/* Для очень маленьких экранов */
-@media (max-height: 500px) {
-    .game-container {
-        padding: 8px;
+@media (max-height: 600px) {
+    .upgrade {
+        padding: 5px;
+        font-size: 0.7rem;
     }
     
-    .tab-button, .upgrade-btn {
-        padding: 6px 3px;
+    #lightsaber {
+        width: min(60%, 200px);
     }
 }
