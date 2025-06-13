@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Wars Auto-Clicker</title>
+    <title>Star Wars Clicker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,25 +23,36 @@
         </div>
 
         <div class="upgrades-container">
-            <div class="upgrade" data-type="click">
-                <div class="upgrade-name">Улучшение меча</div>
-                <div class="upgrade-level">Ур. <span>1</span></div>
-                <div class="upgrade-cost">Цена: <span>50</span></div>
-                <div class="upgrade-effect">+1/клик</div>
+            <div class="upgrades-column">
+                <div class="upgrade" data-type="click">
+                    <div class="upgrade-name">Меч</div>
+                    <div class="upgrade-level">Ур.<span>1</span></div>
+                    <div class="upgrade-cost"><span>50</span></div>
+                    <div class="upgrade-effect">+1/клик</div>
+                </div>
+                
+                <div class="upgrade" data-type="auto">
+                    <div class="upgrade-name">Дроиды</div>
+                    <div class="upgrade-level">Ур.<span>1</span></div>
+                    <div class="upgrade-cost"><span>100</span></div>
+                    <div class="upgrade-effect">+1/сек</div>
+                </div>
             </div>
             
-            <div class="upgrade" data-type="auto">
-                <div class="upgrade-name">Дроиды</div>
-                <div class="upgrade-level">Ур. <span>1</span></div>
-                <div class="upgrade-cost">Цена: <span>100</span></div>
-                <div class="upgrade-effect">+1/сек</div>
-            </div>
-            
-            <div class="upgrade" data-type="critical">
-                <div class="upgrade-name">Крит. удар</div>
-                <div class="upgrade-level">Ур. <span>1</span></div>
-                <div class="upgrade-cost">Цена: <span>200</span></div>
-                <div class="upgrade-effect">+5%</div>
+            <div class="upgrades-column">
+                <div class="upgrade" data-type="critical">
+                    <div class="upgrade-name">Криты</div>
+                    <div class="upgrade-level">Ур.<span>1</span></div>
+                    <div class="upgrade-cost"><span>200</span></div>
+                    <div class="upgrade-effect">+5%</div>
+                </div>
+                
+                <div class="upgrade" data-type="combo">
+                    <div class="upgrade-name">Комбо</div>
+                    <div class="upgrade-level">Ур.<span>1</span></div>
+                    <div class="upgrade-cost"><span>300</span></div>
+                    <div class="upgrade-effect">x2 на 10с</div>
+                </div>
             </div>
         </div>
     </div>
