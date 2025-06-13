@@ -20,9 +20,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('assets/background.png') no-repeat center center;
+    background: url('assets/background.jpg') no-repeat center center;
     background-size: cover;
     z-index: -1;
+    opacity: 0.8;
 }
 
 .game-container {
@@ -31,24 +32,19 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 2vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1vh;
-    font-size: 2vh;
-}
-
-.score {
-    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .stats {
     display: flex;
-    gap: 1.5vh;
+    gap: 10px;
 }
 
 .clicker-section {
@@ -56,62 +52,73 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 20vh;
+    min-height: 100px;
 }
 
 #lightsaber {
-    width: 30vh;
-    max-width: 80%;
+    width: 120px;
     height: auto;
     cursor: pointer;
     transition: transform 0.1s;
-    filter: drop-shadow(0 0 2vh rgba(255, 255, 0, 0.8));
+    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.8));
 }
 
-.upgrades-container {
+.tabs {
     display: flex;
-    gap: 1vh;
-    margin-top: 1vh;
-    height: 20vh;
+    margin: 5px 0;
 }
 
-.upgrades-column {
+.tab-button {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
+    padding: 8px 0;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid yellow;
+    color: yellow;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tab-button.active {
+    background: yellow;
+    color: black;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.tab-content.active {
+    display: block;
 }
 
 .upgrade {
-    flex: 1;
     background: rgba(0, 0, 0, 0.5);
-    border: 0.2vh solid yellow;
-    border-radius: 1vh;
-    padding: 0.5vh;
-    font-size: 1.5vh;
-    text-align: center;
+    border: 1px solid yellow;
+    border-radius: 5px;
+    padding: 8px;
+    margin-bottom: 5px;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
 }
 
-.upgrade-name {
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.upgrade-level, .upgrade-cost, .upgrade-effect {
-    font-size: 1.3vh;
+.upgrade-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3px;
 }
 
 .upgrade-cost {
     color: #ff0;
+    margin-bottom: 3px;
 }
 
 .upgrade-effect {
     color: #0f0;
+    font-size: 11px;
 }
 
 .upgrade.active {
@@ -126,8 +133,8 @@ body {
 }
 
 @keyframes pulse {
-    0% { box-shadow: 0 0 0.5vh yellow; }
-    100% { box-shadow: 0 0 1.5vh yellow; }
+    0% { box-shadow: 0 0 3px yellow; }
+    100% { box-shadow: 0 0 8px yellow; }
 }
 
 .click-animation {
@@ -138,30 +145,14 @@ body {
     position: absolute;
     color: yellow;
     font-weight: bold;
-    font-size: 2vh;
+    font-size: 14px;
     pointer-events: none;
     animation: float 1s forwards;
-    text-shadow: 0 0 0.5vh black;
+    text-shadow: 0 0 2px black;
     z-index: 10;
 }
 
 @keyframes float {
     0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-5vh); opacity: 0; }
-}
-
-/* Особые стили для очень маленьких экранов */
-@media (max-aspect-ratio: 9/16) {
-    .upgrades-container {
-        flex-direction: column;
-        height: auto;
-    }
-    
-    .upgrade {
-        padding: 0.3vh;
-    }
-    
-    #lightsaber {
-        width: 25vh;
-    }
+    100% { transform: translateY(-40px); opacity: 0; }
 }
