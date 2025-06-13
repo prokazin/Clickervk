@@ -3,7 +3,6 @@ let points = 0;
 let clickPower = 1;
 let autoPower = 0;
 let criticalChance = 0;
-let comboActive = false;
 
 // Коэффициент роста цен
 const PRICE_INCREASE_RATE = 1.3;
@@ -11,6 +10,7 @@ const PRICE_INCREASE_RATE = 1.3;
 // Инициализация игры
 loadGame();
 updateUI();
+setupTabs();
 
 // Автокликер
 setInterval(() => {
@@ -19,6 +19,19 @@ setInterval(() => {
     checkUpgrades();
     saveGame();
 }, 1000);
+
+// Настройка вкладок
+function setupTabs() {
+    document.querySelectorAll('.tab-button').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+    });
+}
 
 // Клик по мечу
 document.getElementById('lightsaber').addEventListener('click', function(e) {
@@ -37,9 +50,6 @@ document.getElementById('lightsaber').addEventListener('click', function(e) {
         showFloatingText("+" + earned, e.clientX, e.clientY);
     }
     
-    // Комбо
-    if (comboActive) earned *= 2;
-    
     points += earned;
     updatePoints();
     checkUpgrades();
@@ -51,78 +61,56 @@ function checkUpgrades() {
     document.querySelectorAll('.upgrade').forEach(upgrade => {
         const type = upgrade.dataset.type;
         const level = parseInt(upgrade.querySelector('.upgrade-level span').textContent);
-        const cost = getUpgradeCost(type, level);
+        const baseCost = parseInt(upgrade.dataset.baseCost);
+        const cost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, level - 1));
         
         if (points >= cost) {
-            if (!upgrade.classList.contains('active')) {
-                upgrade.classList.add('active');
-                setTimeout(() => buyUpgrade(upgrade, type, level), 500);
-            }
+            upgrade.classList.add('active');
         } else {
             upgrade.classList.remove('active');
         }
     });
 }
 
-// Покупка улучшения
-function buyUpgrade(upgrade, type, level) {
-    const cost = getUpgradeCost(type, level);
-    
-    if (points >= cost) {
-        points -= cost;
+// Покупка улучшения (при клике)
+document.querySelectorAll('.upgrade').forEach(upgrade => {
+    upgrade.addEventListener('click', function() {
+        if (!this.classList.contains('active')) return;
         
-        // Улучшение характеристик
-        switch(type) {
-            case 'click':
-                clickPower += 1;
-                break;
-            case 'auto':
-                autoPower += 1;
-                break;
-            case 'critical':
-                criticalChance += 5;
-                break;
-            case 'combo':
-                activateCombo();
-                break;
+        const type = this.dataset.type;
+        const level = parseInt(this.querySelector('.upgrade-level span').textContent);
+        const baseCost = parseInt(this.dataset.baseCost);
+        const power = parseInt(this.dataset.power);
+        const cost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, level - 1));
+        
+        if (points >= cost) {
+            points -= cost;
+            
+            // Улучшение характеристик
+            if (type === 'click') {
+                clickPower += power;
+            } else if (type === 'auto') {
+                autoPower += power;
+            } else if (type === 'critical') {
+                criticalChance += power;
+            }
+            
+            // Увеличение уровня
+            const newLevel = level + 1;
+            this.querySelector('.upgrade-level span').textContent = newLevel;
+            
+            // Обновление цены
+            const newCost = Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, newLevel - 1));
+            this.querySelector('.upgrade-cost span').textContent = newCost;
+            
+            // Сброс анимации
+            this.classList.remove('active');
+            
+            updateUI();
+            saveGame();
         }
-        
-        // Увеличение уровня
-        const newLevel = level + 1;
-        upgrade.querySelector('.upgrade-level span').textContent = newLevel;
-        
-        // Обновление цены
-        upgrade.querySelector('.upgrade-cost span').textContent = getUpgradeCost(type, newLevel);
-        
-        // Сброс анимации
-        upgrade.classList.remove('active');
-        
-        updateUI();
-        saveGame();
-    }
-}
-
-// Активация комбо
-function activateCombo() {
-    if (comboActive) return;
-    
-    comboActive = true;
-    setTimeout(() => {
-        comboActive = false;
-    }, 10000);
-}
-
-// Расчет стоимости улучшения
-function getUpgradeCost(type, level) {
-    const baseCost = {
-        'click': 50,
-        'auto': 100,
-        'critical': 200,
-        'combo': 300
-    }[type];
-    
-    return Math.floor(baseCost * Math.pow(PRICE_INCREASE_RATE, level - 1));
-}
+    });
+});
 
 // Обновление интерфейса
 function updatePoints() {
@@ -163,7 +151,8 @@ function saveGame() {
     document.querySelectorAll('.upgrade').forEach(upgrade => {
         gameData.upgrades.push({
             type: upgrade.dataset.type,
-            level: parseInt(upgrade.querySelector('.upgrade-level span').textContent)
+            level: parseInt(upgrade.querySelector('.upgrade-level span').textContent),
+            baseCost: parseInt(upgrade.dataset.baseCost)
         });
     });
     
@@ -184,8 +173,8 @@ function loadGame() {
                 const element = document.querySelector(`.upgrade[data-type="${upgrade.type}"]`);
                 if (element) {
                     element.querySelector('.upgrade-level span').textContent = upgrade.level || 1;
-                    element.querySelector('.upgrade-cost span').textContent = 
-                        getUpgradeCost(upgrade.type, upgrade.level || 1);
+                    const newCost = Math.floor(upgrade.baseCost * Math.pow(PRICE_INCREASE_RATE, (upgrade.level || 1) - 1));
+                    element.querySelector('.upgrade-cost span').textContent = newCost;
                 }
             });
         }
