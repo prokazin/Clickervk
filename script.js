@@ -24,11 +24,9 @@ setInterval(() => {
 function setupTabs() {
     document.querySelectorAll('.tab-button').forEach(tab => {
         tab.addEventListener('click', function() {
-            // Удаляем активный класс у всех кнопок и контента
             document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             
-            // Добавляем активный класс текущей кнопке и соответствующему контенту
             this.classList.add('active');
             const tabId = this.dataset.tab;
             document.getElementById(tabId).classList.add('active');
