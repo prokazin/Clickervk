@@ -3,49 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Wars Clicker</title>
+    <title>Star Wars Auto-Clicker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="background"></div>
     
     <div class="game-container">
-        <div class="score">Очки Силы: <span id="points">0</span></div>
+        <div class="header">
+            <div class="score">Сила: <span id="points">0</span></div>
+            <div class="stats">
+                <div>+<span id="click-power">1</span>/клик</div>
+                <div>+<span id="auto-power">0</span>/сек</div>
+            </div>
+        </div>
         
         <div class="clicker-section">
             <img id="lightsaber" src="assets/lightsaber.png" alt="Световой меч">
         </div>
 
-        <div class="tabs">
-            <button class="tab-button active" data-tab="click">Клик</button>
-            <button class="tab-button" data-tab="auto">Авто</button>
-            <button class="tab-button" data-tab="bonus">Бонусы</button>
-        </div>
-
-        <div id="click" class="tab-content active">
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="click" data-level="1" data-base-cost="50" data-power="1">
-                    Уровень <span class="level">1</span>: +<span class="power-value">1</span>/клик 
-                    (<span class="cost">50</span>)
-                </button>
+        <div class="upgrades-container">
+            <div class="upgrade" data-type="click">
+                <div class="upgrade-name">Улучшение меча</div>
+                <div class="upgrade-level">Ур. <span>1</span></div>
+                <div class="upgrade-cost">Цена: <span>50</span></div>
+                <div class="upgrade-effect">+1/клик</div>
             </div>
-        </div>
-
-        <div id="auto" class="tab-content">
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="auto" data-level="1" data-base-cost="100" data-power="1">
-                    Дроид-кликер: +<span class="power-value">1</span>/сек 
-                    (<span class="cost">100</span>)
-                </button>
+            
+            <div class="upgrade" data-type="auto">
+                <div class="upgrade-name">Дроиды</div>
+                <div class="upgrade-level">Ур. <span>1</span></div>
+                <div class="upgrade-cost">Цена: <span>100</span></div>
+                <div class="upgrade-effect">+1/сек</div>
             </div>
-        </div>
-
-        <div id="bonus" class="tab-content">
-            <div class="upgrade-item">
-                <button class="upgrade-btn" data-type="critical" data-level="1" data-base-cost="200" data-power="5">
-                    Крит. удар +<span class="power-value">5</span>% 
-                    (<span class="cost">200</span>)
-                </button>
+            
+            <div class="upgrade" data-type="critical">
+                <div class="upgrade-name">Крит. удар</div>
+                <div class="upgrade-level">Ур. <span>1</span></div>
+                <div class="upgrade-cost">Цена: <span>200</span></div>
+                <div class="upgrade-effect">+5%</div>
             </div>
         </div>
     </div>
