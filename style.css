@@ -1,33 +1,242 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  margin: 0;
-  padding: 20px;
+/* Previous styles remain the same, adding new styles below */
+
+/* Tab System */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    border-bottom: 1px solid #ffe81f;
 }
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.tab-button {
+    background: none;
+    border: none;
+    color: #ffe81f;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    transition: all 0.3s;
 }
 
-button {
-  background: #5181b8;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+.tab-button.active {
+    background-color: rgba(255, 232, 31, 0.2);
+    border-bottom: 3px solid #ffe81f;
 }
 
-button:hover {
-  background: #3a6ea5;
+.tab-button:hover:not(.active) {
+    background-color: rgba(255, 232, 31, 0.1);
 }
 
-.hidden {
-  display: none;
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Clan System */
+.clan-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.clan-actions input, .clan-actions button {
+    padding: 8px 12px;
+    background-color: rgba(20, 20, 20, 0.9);
+    color: #ffe81f;
+    border: 1px solid #333;
+}
+
+.clan-actions button {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.clan-actions button:hover {
+    border-color: #ffe81f;
+}
+
+.clan-info {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border: 1px solid #ffe81f;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#clan-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.clan-member {
+    background-color: rgba(20, 20, 20, 0.9);
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #333;
+}
+
+.clan-ranking table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.clan-ranking th, .clan-ranking td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.clan-ranking th {
+    background-color: rgba(255, 232, 31, 0.1);
+}
+
+.clan-ranking tr:hover {
+    background-color: rgba(255, 232, 31, 0.05);
+}
+
+/* Achievements */
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.achievement {
+    background-color: rgba(20, 20, 20, 0.9);
+    padding: 15px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.achievement.unlocked {
+    border-color: #ffe81f;
+    background-color: rgba(255, 232, 31, 0.05);
+}
+
+.achievement-icon {
+    font-size: 24px;
+    color: #ffe81f;
+}
+
+.achievement-info {
+    flex-grow: 1;
+}
+
+.achievement-progress {
+    height: 5px;
+    background-color: #333;
+    margin-top: 5px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.achievement-progress-bar {
+    height: 100%;
+    background-color: #ffe81f;
+    width: 0%;
+}
+
+.achievements-stats {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+#achievements-progress {
+    height: 100%;
+    background-color: #ffe81f;
+    width: 0%;
+}
+
+/* Daily Reward */
+#daily-reward {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+#daily-reward-button {
+    padding: 8px 15px;
+    background-color: #333;
+    color: #ffe81f;
+    border: 1px solid #ffe81f;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#daily-reward-button:hover {
+    background-color: #ffe81f;
+    color: #000;
+}
+
+#daily-reward-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #333;
+    color: #ffe81f;
+}
+
+/* Event Banner */
+.event-banner {
+    background: linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(255,232,31,0.3) 50%, rgba(0,0,0,0.7) 100%);
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid #ffe81f;
+    border-radius: 5px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 5px rgba(255,232,31,0.5); }
+    50% { box-shadow: 0 0 20px rgba(255,232,31,0.8); }
+    100% { box-shadow: 0 0 5px rgba(255,232,31,0.5); }
+}
+
+/* Notifications */
+#notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffe81f;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #ffe81f;
+    border-radius: 4px;
+    max-width: 300px;
+    animation: slideIn 0.5s forwards, fadeOut 0.5s forwards 3s;
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; }
 }
