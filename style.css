@@ -104,6 +104,11 @@ header {
     height: 100%;
     object-fit: contain;
     cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#lightsaber:active {
+    transform: scale(0.95);
 }
 
 #click-effect {
@@ -114,6 +119,7 @@ header {
     height: 100%;
     background: radial-gradient(circle, rgba(255,232,31,0.4) 0%, rgba(255,232,31,0) 70%);
     opacity: 0;
+    pointer-events: none;
 }
 
 #click-power {
@@ -124,6 +130,7 @@ header {
     font-size: 16px;
     font-weight: bold;
     opacity: 0;
+    pointer-events: none;
 }
 
 .stats {
@@ -163,6 +170,7 @@ button:active {
 button:disabled {
     opacity: 0.5;
     transform: none;
+    cursor: not-allowed;
 }
 
 /* Улучшения */
