@@ -13,19 +13,33 @@
         <header>
             <h1 class="star-wars-font">ЗВЁЗДНЫЕ ВОЙНЫ: КЛИКЕР</h1>
             <div class="player-info">
-                <div id="credits">Кредиты: 0</div>
-                <div id="force-points">Очки Силы: 0</div>
-                <div id="level">Уровень: Падаван</div>
-                <div id="clan-info">Клан: Нет</div>
+                <div id="credits"><i class="fas fa-coins"></i> Кредиты: <span>0</span></div>
+                <div id="force-points"><i class="fas fa-bolt"></i> Очки Силы: <span>0</span></div>
+                <div id="level"><i class="fas fa-level-up-alt"></i> Уровень: <span>Падаван</span></div>
             </div>
         </header>
 
         <nav class="tabs">
-            <button class="tab-button active" data-tab="main">Главная</button>
-            <button class="tab-button" data-tab="upgrades">Улучшения</button>
-            <button class="tab-button" data-tab="bosses">Боссы</button>
-            <button class="tab-button" data-tab="clan">Клан</button>
-            <button class="tab-button" data-tab="achievements">Достижения</button>
+            <div class="tab-button active" data-tab="main">
+                <i class="fas fa-jedi"></i>
+                <span>Главная</span>
+            </div>
+            <div class="tab-button" data-tab="upgrades">
+                <i class="fas fa-cogs"></i>
+                <span>Улучшения</span>
+            </div>
+            <div class="tab-button" data-tab="bosses">
+                <i class="fas fa-skull"></i>
+                <span>Боссы</span>
+            </div>
+            <div class="tab-button" data-tab="clan">
+                <i class="fas fa-users"></i>
+                <span>Клан</span>
+            </div>
+            <div class="tab-button" data-tab="achievements">
+                <i class="fas fa-trophy"></i>
+                <span>Достижения</span>
+            </div>
         </nav>
 
         <main>
@@ -34,59 +48,74 @@
                 <div id="lightsaber-container">
                     <img src="./lightsaber.png" alt="Световой меч" id="lightsaber" class="clickable">
                     <div id="click-effect"></div>
+                    <div id="click-power-display">+1</div>
+                    <div class="double-tap-hint">Двойное нажатие для активации</div>
                 </div>
 
                 <div class="stats">
-                    <div id="cps">Кредитов в секунду: 0</div>
-                    <div id="click-power">Сила клика: 1</div>
-                    <div id="daily-reward">
-                        <button id="daily-reward-button">Получить награду</button>
-                        <span id="daily-streak">Серия: 0 дней</span>
-                    </div>
+                    <div id="cps"><i class="fas fa-tachometer-alt"></i> Кредитов/сек: <span>0</span></div>
+                    <div id="clicks"><i class="fas fa-mouse-pointer"></i> Всего кликов: <span>0</span></div>
                 </div>
 
-                <div class="event-banner" id="event-banner">
-                    <h3>Событие: Войны Клонов</h3>
-                    <p>Получайте двойные кредиты в течение 24 часов!</p>
+                <div class="daily-reward-container">
+                    <button id="daily-reward-button">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Ежедневная награда</span>
+                        <div id="daily-streak">Серия: 0 дней</div>
+                    </button>
                 </div>
             </div>
 
             <!-- Улучшения -->
             <div id="upgrades-tab" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-cogs"></i> Улучшения</h2>
                 <div class="upgrades-grid" id="upgrades-container"></div>
             </div>
 
             <!-- Боссы -->
             <div id="bosses-tab" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-skull"></i> Боссы</h2>
                 <div class="bosses-grid" id="bosses-container"></div>
             </div>
 
             <!-- Клан -->
             <div id="clan-tab" class="tab-content">
+                <h2 class="section-title"><i class="fas fa-users"></i> Клан</h2>
                 <div class="clan-actions">
                     <input type="text" id="clan-name-input" placeholder="Название клана" maxlength="20">
-                    <button id="create-clan-btn">Создать клан (5000 кредитов)</button>
-                    <button id="join-clan-btn">Вступить в клан</button>
-                    <button id="leave-clan-btn">Покинуть клан</button>
+                    <button id="create-clan-btn">
+                        <i class="fas fa-plus"></i> Создать (5000)
+                    </button>
+                    <button id="join-clan-btn">
+                        <i class="fas fa-sign-in-alt"></i> Вступить
+                    </button>
+                    <button id="leave-clan-btn">
+                        <i class="fas fa-sign-out-alt"></i> Покинуть
+                    </button>
                 </div>
                 
                 <div class="clan-info" id="clan-details">
-                    <h3>Ваш клан: <span id="current-clan-name">Нет</span></h3>
-                    <div id="clan-members"></div>
-                    <div id="clan-treasury">Казна: 0 кредитов</div>
-                    <button id="donate-btn">Пожертвовать 1000 кредитов</button>
+                    <h3><i class="fas fa-flag"></i> Ваш клан: <span id="current-clan-name">Нет</span></h3>
+                    <div class="clan-members-container">
+                        <h4><i class="fas fa-users"></i> Участники:</h4>
+                        <div id="clan-members"></div>
+                    </div>
+                    <div id="clan-treasury"><i class="fas fa-coins"></i> Казна: <span>0</span> кредитов</div>
+                    <button id="donate-btn">
+                        <i class="fas fa-donate"></i> Пожертвовать 1000
+                    </button>
                 </div>
                 
                 <div class="clan-ranking">
-                    <h3>Рейтинг кланов</h3>
+                    <h3><i class="fas fa-medal"></i> Рейтинг кланов</h3>
                     <table id="clan-leaderboard">
                         <thead>
                             <tr>
-                                <th>Место</th>
+                                <th>#</th>
                                 <th>Название</th>
-                                <th>Уровень</th>
-                                <th>Участники</th>
-                                <th>Казна</th>
+                                <th>Ур.</th>
+                                <th>Уч.</th>
+                                <th>Кредиты</th>
                             </tr>
                         </thead>
                         <tbody id="clan-leaderboard-body"></tbody>
@@ -96,13 +125,18 @@
 
             <!-- Достижения -->
             <div id="achievements-tab" class="tab-content">
-                <div class="achievements-grid" id="achievements-container"></div>
+                <h2 class="section-title"><i class="fas fa-trophy"></i> Достижения</h2>
                 <div class="achievements-stats">
-                    <h3>Прогресс: <span id="achievements-completed">0</span>/15</h3>
-                    <div class="progress-bar">
-                        <div id="achievements-progress"></div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span id="achievements-completed">0</span>/15 выполнено
+                        </div>
+                        <div class="progress-bar">
+                            <div id="achievements-progress"></div>
+                        </div>
                     </div>
                 </div>
+                <div class="achievements-grid" id="achievements-container"></div>
             </div>
         </main>
 
