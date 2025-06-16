@@ -20,50 +20,45 @@
         </header>
 
         <nav class="tabs">
-            <button class="tab-button active" data-tab="main"><i class="fas fa-jedi"></i></button>
-            <button class="tab-button" data-tab="upgrades"><i class="fas fa-cogs"></i></button>
-            <button class="tab-button" data-tab="bosses"><i class="fas fa-skull"></i></button>
-            <button class="tab-button" data-tab="clan"><i class="fas fa-users"></i></button>
-            <button class="tab-button" data-tab="achievements"><i class="fas fa-trophy"></i></button>
+            <button class="tab-button active" data-tab="main"><i class="fas fa-jedi"></i> Главная</button>
+            <button class="tab-button" data-tab="upgrades"><i class="fas fa-cogs"></i> Улучшения</button>
+            <button class="tab-button" data-tab="bosses"><i class="fas fa-skull"></i> Боссы</button>
+            <button class="tab-button" data-tab="clan"><i class="fas fa-users"></i> Клан</button>
+            <button class="tab-button" data-tab="achievements"><i class="fas fa-trophy"></i> Достижения</button>
         </nav>
 
         <main>
-            <!-- Главная -->
             <div id="main-tab" class="tab-content active">
                 <div id="lightsaber-container">
-                    <img src="assets/lightsaber.png" alt="Меч" id="lightsaber">
+                    <img src="assets/lightsaber.png" alt="Меч" id="lightsaber" class="clickable">
                     <div id="click-effect"></div>
                     <div id="click-power">+1</div>
                 </div>
-
                 <div class="stats">
                     <div id="cps"><i class="fas fa-tachometer-alt"></i> <span>0/сек</span></div>
-                    <button id="daily-reward-btn"><i class="fas fa-calendar-day"></i> Награда</button>
+                    <button id="daily-reward-btn" class="clickable"><i class="fas fa-calendar-day"></i> Награда</button>
                 </div>
             </div>
 
-            <!-- Улучшения -->
             <div id="upgrades-tab" class="tab-content">
                 <div class="upgrades-grid" id="upgrades-container"></div>
             </div>
 
-            <!-- Боссы -->
             <div id="bosses-tab" class="tab-content">
                 <div class="bosses-grid" id="bosses-container"></div>
             </div>
 
-            <!-- Клан -->
             <div id="clan-tab" class="tab-content">
                 <div class="clan-section">
                     <input type="text" id="clan-name" placeholder="Название клана">
-                    <button id="create-clan"><i class="fas fa-plus"></i> Создать</button>
-                    <button id="join-clan"><i class="fas fa-sign-in-alt"></i> Вступить</button>
+                    <button id="create-clan" class="clickable"><i class="fas fa-plus"></i> Создать</button>
+                    <button id="join-clan" class="clickable"><i class="fas fa-sign-in-alt"></i> Вступить</button>
                 </div>
                 <div id="clan-info">
                     <h3><i class="fas fa-flag"></i> <span id="clan-name-display">Нет клана</span></h3>
                     <div id="clan-members"></div>
                     <div id="clan-treasury"><i class="fas fa-coins"></i> <span>0</span></div>
-                    <button id="donate-btn"><i class="fas fa-donate"></i> Внести 1000</button>
+                    <button id="donate-btn" class="clickable"><i class="fas fa-donate"></i> Внести 1000</button>
                 </div>
                 <div class="clan-leaderboard">
                     <h3><i class="fas fa-medal"></i> Топ кланов</h3>
@@ -71,7 +66,6 @@
                 </div>
             </div>
 
-            <!-- Достижения -->
             <div id="achievements-tab" class="tab-content">
                 <div class="achievements-header">
                     <div class="progress">
