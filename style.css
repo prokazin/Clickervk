@@ -114,9 +114,20 @@ header {
     object-fit: contain;
     cursor: pointer;
     transition: transform 0.1s;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 #lightsaber:active {
+    transform: scale(0.95);
+}
+
+.clickable {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.clickable:active {
     transform: scale(0.95);
 }
 
@@ -140,6 +151,7 @@ header {
     font-weight: bold;
     opacity: 0;
     pointer-events: none;
+    user-select: none;
 }
 
 .stats {
@@ -171,6 +183,7 @@ button {
     display: flex;
     align-items: center;
     gap: 5px;
+    user-select: none;
 }
 
 button:hover {
