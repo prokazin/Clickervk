@@ -21,11 +21,12 @@ body {
     background-size: cover;
     background-attachment: fixed;
     user-select: none;
+    min-height: 100vh;
+    padding: 10px;
 }
 
 .container {
     max-width: 100%;
-    padding: 10px;
     margin: 0 auto;
 }
 
@@ -33,6 +34,7 @@ header {
     text-align: center;
     padding: 10px 0;
     border-bottom: 1px solid var(--yellow);
+    margin-bottom: 10px;
 }
 
 .star-wars-font {
@@ -48,6 +50,7 @@ header {
     gap: 15px;
     font-size: 14px;
     margin-top: 5px;
+    flex-wrap: wrap;
 }
 
 .player-info div {
@@ -61,33 +64,39 @@ header {
     justify-content: space-around;
     padding: 10px 0;
     border-bottom: 1px solid var(--gray);
+    margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .tab-button {
     background: none;
     border: none;
     color: var(--yellow);
-    font-size: 20px;
-    padding: 5px 10px;
+    font-size: 16px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .tab-button.active {
     color: #fff;
     text-shadow: 0 0 10px var(--yellow);
+    border-bottom: 2px solid var(--yellow);
 }
 
 .tab-content {
     display: none;
     padding: 10px 0;
+    min-height: 300px;
 }
 
 .tab-content.active {
     display: block;
 }
 
-/* Главная вкладка */
 #main-tab {
     text-align: center;
 }
@@ -96,7 +105,7 @@ header {
     position: relative;
     width: 150px;
     height: 200px;
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
 }
 
 #lightsaber {
@@ -138,7 +147,8 @@ header {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    margin-top: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
 }
 
 #cps {
@@ -163,24 +173,28 @@ button {
     gap: 5px;
 }
 
+button:hover {
+    background: rgba(255, 232, 49, 0.2);
+}
+
 button:active {
     transform: scale(0.95);
 }
 
 button:disabled {
     opacity: 0.5;
-    transform: none;
     cursor: not-allowed;
+    transform: none;
 }
 
-/* Улучшения */
-.upgrades-grid {
+.upgrades-grid, .bosses-grid, .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 10px;
+    margin-top: 10px;
 }
 
-.upgrade {
+.upgrade, .boss, .achievement {
     background: rgba(20, 20, 20, 0.8);
     border: 1px solid var(--gray);
     border-radius: 5px;
@@ -188,33 +202,9 @@ button:disabled {
     font-size: 14px;
 }
 
-.upgrade h3 {
-    font-size: 16px;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.upgrade button {
-    width: 100%;
-    margin-top: 5px;
-    justify-content: center;
-}
-
-/* Боссы */
-.bosses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-
 .boss {
     background: rgba(40, 10, 10, 0.8);
     border: 1px solid #500;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
 }
 
 .boss.defeated {
@@ -222,7 +212,11 @@ button:disabled {
     border-color: #050;
 }
 
-.boss h3 {
+.achievement.unlocked {
+    border-color: var(--yellow);
+}
+
+.upgrade h3, .boss h3, .achievement h4 {
     font-size: 16px;
     margin-bottom: 5px;
     display: flex;
@@ -230,21 +224,22 @@ button:disabled {
     gap: 5px;
 }
 
-.boss button {
+.upgrade button, .boss button {
     width: 100%;
-    margin-top: 5px;
+    margin-top: 8px;
     justify-content: center;
 }
 
-/* Клан */
 .clan-section {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 #clan-name {
     flex-grow: 1;
+    min-width: 200px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--yellow);
     color: var(--yellow);
@@ -257,7 +252,7 @@ button:disabled {
     background: rgba(10, 10, 40, 0.8);
     border: 1px solid var(--yellow);
     border-radius: 5px;
-    padding: 10px;
+    padding: 15px;
     margin-bottom: 15px;
 }
 
@@ -270,45 +265,25 @@ button:disabled {
 
 .clan-member {
     background: rgba(0, 0, 0, 0.5);
-    padding: 3px 8px;
+    padding: 5px 10px;
     border-radius: 3px;
     font-size: 13px;
-}
-
-#clan-treasury {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin: 10px 0;
-}
-
-#donate-btn {
-    width: 100%;
-    justify-content: center;
 }
 
 .clan-leaderboard {
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--yellow);
     border-radius: 5px;
-    padding: 10px;
-}
-
-.clan-leaderboard h3 {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    padding: 15px;
 }
 
 .leaderboard-row {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--gray);
 }
 
-/* Достижения */
 .achievements-header {
     margin-bottom: 15px;
 }
@@ -317,7 +292,7 @@ button:disabled {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .progress-bar {
@@ -332,39 +307,14 @@ button:disabled {
     height: 100%;
     background: var(--yellow);
     width: 0%;
-}
-
-.achievements-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
-}
-
-.achievement {
-    background: rgba(20, 20, 20, 0.8);
-    border: 1px solid var(--gray);
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 14px;
-}
-
-.achievement.unlocked {
-    border-color: var(--yellow);
-}
-
-.achievement h4 {
-    font-size: 15px;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    transition: width 0.3s;
 }
 
 .achievement-progress {
     height: 5px;
     background: var(--gray);
     border-radius: 3px;
-    margin-top: 5px;
+    margin: 8px 0;
     overflow: hidden;
 }
 
@@ -374,12 +324,12 @@ button:disabled {
     width: 0%;
 }
 
-/* Уведомления */
 #notifications {
     position: fixed;
     top: 10px;
     right: 10px;
     max-width: 250px;
+    z-index: 1000;
 }
 
 .notification {
@@ -388,8 +338,8 @@ button:disabled {
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 0 5px 5px 0;
-    animation: slideIn 0.3s, fadeOut 0.3s 2s forwards;
-    transform: translateX(100%);
+    animation: slideIn 0.3s forwards, fadeOut 0.3s 2.7s forwards;
+    transform: translateX(120%);
 }
 
 @keyframes slideIn {
@@ -400,7 +350,6 @@ button:disabled {
     to { opacity: 0; }
 }
 
-/* Анимации */
 @keyframes clickEffect {
     0% { opacity: 0; transform: scale(0.5); }
     50% { opacity: 1; transform: scale(1.2); }
@@ -412,23 +361,18 @@ button:disabled {
     100% { opacity: 0; transform: translate(-50%, -30px); }
 }
 
-/* Мобильная адаптация */
 @media (max-width: 600px) {
-    .player-info {
-        font-size: 12px;
+    .tab-button {
+        font-size: 14px;
+        padding: 6px 8px;
+    }
+    
+    .upgrades-grid, .bosses-grid, .achievements-grid {
+        grid-template-columns: 1fr 1fr;
     }
     
     #lightsaber-container {
         width: 120px;
         height: 160px;
-    }
-    
-    button {
-        padding: 6px 10px;
-        font-size: 12px;
-    }
-    
-    .upgrades-grid, .bosses-grid, .achievements-grid {
-        grid-template-columns: 1fr 1fr;
     }
 }
