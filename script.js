@@ -90,21 +90,23 @@ function setupEventListeners() {
     
     // Переключение вкладок
     document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tab = btn.dataset.tab;
+        btn.addEventListener('click', function() {
+            const tab = this.dataset.tab;
             switchTab(tab);
         });
     });
     
     // Динамические обработчики
-    document.addEventListener('click', e => {
-        if (e.target.classList.contains('buy-upgrade')) {
-            const id = parseInt(e.target.dataset.id);
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('buy-upgrade') || e.target.closest('.buy-upgrade')) {
+            const button = e.target.classList.contains('buy-upgrade') ? e.target : e.target.closest('.buy-upgrade');
+            const id = parseInt(button.dataset.id);
             buyUpgrade(id);
         }
         
-        if (e.target.classList.contains('fight-boss')) {
-            const id = parseInt(e.target.dataset.id);
+        if (e.target.classList.contains('fight-boss') || e.target.closest('.fight-boss')) {
+            const button = e.target.classList.contains('fight-boss') ? e.target : e.target.closest('.fight-boss');
+            const id = parseInt(button.dataset.id);
             fightBoss(id);
         }
     });
@@ -444,4 +446,4 @@ function renderAll() {
 }
 
 // Запуск игры
-window.addEventListener('load', init);
+window.addEventListener('DOMContentLoaded', init);
