@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Star Wars Credit Clicker</title>
+    <title>Звёздные Войны: Кликер</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,82 +11,82 @@
 <body>
     <div class="container">
         <header>
-            <h1 class="star-wars-font">STAR WARS CREDIT CLICKER</h1>
+            <h1 class="star-wars-font">ЗВЁЗДНЫЕ ВОЙНЫ: КЛИКЕР</h1>
             <div class="player-info">
-                <div id="credits">Credits: 0</div>
-                <div id="force-points">Force Points: 0</div>
-                <div id="level">Level: Padawan</div>
-                <div id="clan-info">Clan: None</div>
+                <div id="credits">Кредиты: 0</div>
+                <div id="force-points">Очки Силы: 0</div>
+                <div id="level">Уровень: Падаван</div>
+                <div id="clan-info">Клан: Нет</div>
             </div>
         </header>
 
         <nav class="tabs">
-            <button class="tab-button active" data-tab="main">Main</button>
-            <button class="tab-button" data-tab="upgrades">Upgrades</button>
-            <button class="tab-button" data-tab="bosses">Bosses</button>
-            <button class="tab-button" data-tab="clan">Clan</button>
-            <button class="tab-button" data-tab="achievements">Achievements</button>
+            <button class="tab-button active" data-tab="main">Главная</button>
+            <button class="tab-button" data-tab="upgrades">Улучшения</button>
+            <button class="tab-button" data-tab="bosses">Боссы</button>
+            <button class="tab-button" data-tab="clan">Клан</button>
+            <button class="tab-button" data-tab="achievements">Достижения</button>
         </nav>
 
         <main>
-            <!-- Main Tab -->
+            <!-- Главная вкладка -->
             <div id="main-tab" class="tab-content active">
                 <div id="lightsaber-container">
-                    <img src="https://i.imgur.com/JqYeZvn.png" alt="Lightsaber" id="lightsaber" class="clickable">
+                    <img src="./lightsaber.png" alt="Световой меч" id="lightsaber" class="clickable">
                     <div id="click-effect"></div>
                 </div>
 
                 <div class="stats">
-                    <div id="cps">Credits per second: 0</div>
-                    <div id="click-power">Click power: 1</div>
+                    <div id="cps">Кредитов в секунду: 0</div>
+                    <div id="click-power">Сила клика: 1</div>
                     <div id="daily-reward">
-                        <button id="daily-reward-button">Claim Daily Reward</button>
-                        <span id="daily-streak">Streak: 0 days</span>
+                        <button id="daily-reward-button">Получить награду</button>
+                        <span id="daily-streak">Серия: 0 дней</span>
                     </div>
                 </div>
 
                 <div class="event-banner" id="event-banner">
-                    <h3>Special Event: Clone Wars</h3>
-                    <p>Earn double credits for the next 24 hours!</p>
+                    <h3>Событие: Войны Клонов</h3>
+                    <p>Получайте двойные кредиты в течение 24 часов!</p>
                 </div>
             </div>
 
-            <!-- Upgrades Tab -->
+            <!-- Улучшения -->
             <div id="upgrades-tab" class="tab-content">
                 <div class="upgrades-grid" id="upgrades-container"></div>
             </div>
 
-            <!-- Bosses Tab -->
+            <!-- Боссы -->
             <div id="bosses-tab" class="tab-content">
                 <div class="bosses-grid" id="bosses-container"></div>
             </div>
 
-            <!-- Clan Tab -->
+            <!-- Клан -->
             <div id="clan-tab" class="tab-content">
                 <div class="clan-actions">
-                    <input type="text" id="clan-name-input" placeholder="Clan name" maxlength="20">
-                    <button id="create-clan-btn">Create Clan (5000 credits)</button>
-                    <button id="join-clan-btn">Join Clan</button>
-                    <button id="leave-clan-btn">Leave Clan</button>
+                    <input type="text" id="clan-name-input" placeholder="Название клана" maxlength="20">
+                    <button id="create-clan-btn">Создать клан (5000 кредитов)</button>
+                    <button id="join-clan-btn">Вступить в клан</button>
+                    <button id="leave-clan-btn">Покинуть клан</button>
                 </div>
                 
                 <div class="clan-info" id="clan-details">
-                    <h3>Your Clan: <span id="current-clan-name">None</span></h3>
+                    <h3>Ваш клан: <span id="current-clan-name">Нет</span></h3>
                     <div id="clan-members"></div>
-                    <div id="clan-treasury">Treasury: 0 credits</div>
-                    <button id="donate-btn">Donate 1000 credits</button>
+                    <div id="clan-treasury">Казна: 0 кредитов</div>
+                    <button id="donate-btn">Пожертвовать 1000 кредитов</button>
                 </div>
                 
                 <div class="clan-ranking">
-                    <h3>Clan Rankings</h3>
+                    <h3>Рейтинг кланов</h3>
                     <table id="clan-leaderboard">
                         <thead>
                             <tr>
-                                <th>Rank</th>
-                                <th>Clan Name</th>
-                                <th>Level</th>
-                                <th>Members</th>
-                                <th>Treasury</th>
+                                <th>Место</th>
+                                <th>Название</th>
+                                <th>Уровень</th>
+                                <th>Участники</th>
+                                <th>Казна</th>
                             </tr>
                         </thead>
                         <tbody id="clan-leaderboard-body"></tbody>
@@ -94,11 +94,11 @@
                 </div>
             </div>
 
-            <!-- Achievements Tab -->
+            <!-- Достижения -->
             <div id="achievements-tab" class="tab-content">
                 <div class="achievements-grid" id="achievements-container"></div>
                 <div class="achievements-stats">
-                    <h3>Progress: <span id="achievements-completed">0</span>/15</h3>
+                    <h3>Прогресс: <span id="achievements-completed">0</span>/15</h3>
                     <div class="progress-bar">
                         <div id="achievements-progress"></div>
                     </div>
@@ -107,7 +107,7 @@
         </main>
 
         <footer class="star-wars-font">
-            <p>May the Force be with you!</p>
+            <p>Да пребудет с тобой Сила!</p>
         </footer>
     </div>
 
