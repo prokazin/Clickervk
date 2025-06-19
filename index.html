@@ -6,6 +6,7 @@
     <title>STAR WARS Кликер</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -13,15 +14,16 @@
             <h1 class="game-title">STAR WARS</h1>
             <div class="player-stats">
                 <div class="stat">
-                    <i class="fas fa-coins"></i>
+                    <i class="fas fa-coins gold"></i>
                     <span id="credits">0</span>
                 </div>
                 <div class="stat">
-                    <i class="fas fa-jedi"></i>
+                    <i class="fas fa-jedi blue"></i>
                     <span id="force-points">0</span>
                 </div>
                 <div class="stat">
-                    <span id="level">Падаван</span>
+                    <i class="fas fa-level-up-alt green"></i>
+                    <span id="level">Падаван (1)</span>
                 </div>
             </div>
         </header>
@@ -30,10 +32,13 @@
             <!-- Главная вкладка -->
             <div class="tab-content active" id="main-tab">
                 <div class="clicker-container">
-                    <img src="/assets/lightsaber.png" alt="Меч" id="clicker" class="clickable">
-                    <div class="click-effect"></div>
-                    <div class="cps-display">
-                        <span id="cps">0</span> кредитов/сек
+                    <div class="clicker-display">
+                        <img src="/assets/lightsaber.png" alt="Световой меч" id="clicker" class="clickable">
+                        <div class="click-effect"></div>
+                    </div>
+                    <div class="stats-display">
+                        <p>Кликов: <span id="click-count">0</span></p>
+                        <p>Доход: <span id="cps">0</span> кредитов/сек</p>
                     </div>
                 </div>
             </div>
@@ -42,38 +47,15 @@
             <div class="tab-content" id="upgrades-tab">
                 <h2><i class="fas fa-cog"></i> Улучшения</h2>
                 <div class="upgrades-grid" id="upgrades-grid">
-                    <!-- Улучшения будут здесь -->
+                    <!-- Улучшения будут загружены через JS -->
                 </div>
             </div>
 
             <!-- Боссы -->
             <div class="tab-content" id="bosses-tab">
                 <h2><i class="fas fa-skull"></i> Боссы</h2>
-                <div class="bosses-grid">
-                    <div class="boss-card" id="vader-boss">
-                        <img src="vader.png" alt="Дарт Вейдер">
-                        <h3>Дарт Вейдер</h3>
-                        <div class="health-bar">
-                            <div class="health" style="width: 100%"></div>
-                        </div>
-                        <button class="attack-btn" data-cost="100">Атаковать (100 ОС)</button>
-                    </div>
-                    <div class="boss-card" id="maul-boss">
-                        <img src="maul.png" alt="Дарт Мол">
-                        <h3>Дарт Мол</h3>
-                        <div class="health-bar">
-                            <div class="health" style="width: 100%"></div>
-                        </div>
-                        <button class="attack-btn" data-cost="250">Атаковать (250 ОС)</button>
-                    </div>
-                    <div class="boss-card" id="obiwan-boss">
-                        <img src="obiwan.png" alt="Оби-Ван Кеноби">
-                        <h3>Оби-Ван Кеноби</h3>
-                        <div class="health-bar">
-                            <div class="health" style="width: 100%"></div>
-                        </div>
-                        <button class="attack-btn" data-cost="500">Атаковать (500 ОС)</button>
-                    </div>
+                <div class="bosses-grid" id="bosses-grid">
+                    <!-- Боссы будут загружены через JS -->
                 </div>
             </div>
 
@@ -81,27 +63,7 @@
             <div class="tab-content" id="clan-tab">
                 <h2><i class="fas fa-users"></i> Клан</h2>
                 <div class="clan-container" id="clan-container">
-                    <div id="no-clan">
-                        <p>Вы не состоите в клане</p>
-                        <button id="create-clan-btn">Создать клан (5,000 кредитов)</button>
-                        <div id="clan-creation-form" style="display: none;">
-                            <input type="text" id="clan-name" placeholder="Название клана">
-                            <button id="confirm-clan-btn">Создать</button>
-                        </div>
-                    </div>
-                    <div id="has-clan" style="display: none;">
-                        <h3 id="clan-name-display"></h3>
-                        <p>Уровень: <span id="clan-level">1</span></p>
-                        <p>Казна: <span id="clan-treasury">0</span> кредитов</p>
-                        <div class="clan-members">
-                            <h4>Участники:</h4>
-                            <ul id="clan-members-list"></ul>
-                        </div>
-                        <div class="donate-section">
-                            <input type="number" id="donation-amount" min="1000" value="1000" step="1000">
-                            <button id="donate-btn">Пожертвовать</button>
-                        </div>
-                    </div>
+                    <!-- Клан будет загружен через JS -->
                 </div>
             </div>
 
@@ -109,7 +71,7 @@
             <div class="tab-content" id="achievements-tab">
                 <h2><i class="fas fa-trophy"></i> Достижения</h2>
                 <div class="achievements-grid" id="achievements-grid">
-                    <!-- Достижения будут здесь -->
+                    <!-- Достижения будут загружены через JS -->
                 </div>
             </div>
         </main>
