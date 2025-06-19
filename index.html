@@ -1,101 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STAR WARS Clicker</title>
+    <title>STAR WARS Кликер</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="star-wars-title">STAR WARS</h1>
-            <div class="player-info">
-                <div class="credits">
+            <h1 class="game-title">STAR WARS</h1>
+            <div class="player-stats">
+                <div class="stat">
                     <i class="fas fa-coins"></i>
                     <span id="credits">0</span>
                 </div>
-                <div class="force-points">
+                <div class="stat">
                     <i class="fas fa-jedi"></i>
-                    <span id="forcePoints">0</span>
+                    <span id="force-points">0</span>
                 </div>
-                <div class="level">
-                    <span id="playerLevel">Падаван</span>
+                <div class="stat">
+                    <span id="level">Падаван</span>
                 </div>
             </div>
         </header>
 
         <main>
+            <!-- Главная вкладка -->
             <div class="tab-content active" id="main-tab">
                 <div class="clicker-container">
-                    <div class="clicker-display">
-                        <img src="/assets/lightsaber.png" alt="Lightsaber" id="lightsaber" class="clickable">
-                        <div class="click-effect" id="click-effect"></div>
-                    </div>
+                    <img src="/assets/lightsaber.png" alt="Меч" id="clicker" class="clickable">
+                    <div class="click-effect"></div>
                     <div class="cps-display">
                         <span id="cps">0</span> кредитов/сек
                     </div>
                 </div>
             </div>
 
+            <!-- Улучшения -->
             <div class="tab-content" id="upgrades-tab">
-                <h2>Улучшения</h2>
-                <div class="upgrades-list" id="upgrades-list">
-                    <!-- Upgrades will be added here dynamically -->
+                <h2><i class="fas fa-cog"></i> Улучшения</h2>
+                <div class="upgrades-grid" id="upgrades-grid">
+                    <!-- Улучшения будут здесь -->
                 </div>
             </div>
 
+            <!-- Боссы -->
             <div class="tab-content" id="bosses-tab">
-                <h2>Боссы</h2>
-                <div class="bosses-container">
-                    <div class="boss" id="darth-vader">
-                        <img src="vader_image.png" alt="Darth Vader">
+                <h2><i class="fas fa-skull"></i> Боссы</h2>
+                <div class="bosses-grid">
+                    <div class="boss-card" id="vader-boss">
+                        <img src="vader.png" alt="Дарт Вейдер">
                         <h3>Дарт Вейдер</h3>
-                        <div class="boss-health">
-                            <div class="health-bar" style="width: 100%"></div>
+                        <div class="health-bar">
+                            <div class="health" style="width: 100%"></div>
                         </div>
-                        <button class="attack-btn">Атаковать (100 ОС)</button>
+                        <button class="attack-btn" data-cost="100">Атаковать (100 ОС)</button>
                     </div>
-                    <div class="boss" id="darth-maul">
-                        <img src="maul_image.png" alt="Darth Maul">
+                    <div class="boss-card" id="maul-boss">
+                        <img src="maul.png" alt="Дарт Мол">
                         <h3>Дарт Мол</h3>
-                        <div class="boss-health">
-                            <div class="health-bar" style="width: 100%"></div>
+                        <div class="health-bar">
+                            <div class="health" style="width: 100%"></div>
                         </div>
-                        <button class="attack-btn">Атаковать (250 ОС)</button>
+                        <button class="attack-btn" data-cost="250">Атаковать (250 ОС)</button>
                     </div>
-                    <div class="boss" id="obi-wan">
-                        <img src="obiwan_image.png" alt="Obi-Wan Kenobi">
+                    <div class="boss-card" id="obiwan-boss">
+                        <img src="obiwan.png" alt="Оби-Ван Кеноби">
                         <h3>Оби-Ван Кеноби</h3>
-                        <div class="boss-health">
-                            <div class="health-bar" style="width: 100%"></div>
+                        <div class="health-bar">
+                            <div class="health" style="width: 100%"></div>
                         </div>
-                        <button class="attack-btn">Атаковать (500 ОС)</button>
+                        <button class="attack-btn" data-cost="500">Атаковать (500 ОС)</button>
                     </div>
                 </div>
             </div>
 
+            <!-- Клан -->
             <div class="tab-content" id="clan-tab">
-                <h2>Клан</h2>
-                <div id="clan-section">
+                <h2><i class="fas fa-users"></i> Клан</h2>
+                <div class="clan-container" id="clan-container">
                     <div id="no-clan">
                         <p>Вы не состоите в клане</p>
                         <button id="create-clan-btn">Создать клан (5,000 кредитов)</button>
-                        <div id="clan-creation" style="display: none;">
+                        <div id="clan-creation-form" style="display: none;">
                             <input type="text" id="clan-name" placeholder="Название клана">
-                            <button id="confirm-clan-btn">Подтвердить</button>
+                            <button id="confirm-clan-btn">Создать</button>
                         </div>
                     </div>
                     <div id="has-clan" style="display: none;">
                         <h3 id="clan-name-display"></h3>
-                        <p>Уровень клана: <span id="clan-level">1</span></p>
+                        <p>Уровень: <span id="clan-level">1</span></p>
                         <p>Казна: <span id="clan-treasury">0</span> кредитов</p>
                         <div class="clan-members">
                             <h4>Участники:</h4>
                             <ul id="clan-members-list"></ul>
                         </div>
-                        <div class="donation-section">
+                        <div class="donate-section">
                             <input type="number" id="donation-amount" min="1000" value="1000" step="1000">
                             <button id="donate-btn">Пожертвовать</button>
                         </div>
@@ -103,15 +105,16 @@
                 </div>
             </div>
 
+            <!-- Достижения -->
             <div class="tab-content" id="achievements-tab">
-                <h2>Достижения</h2>
+                <h2><i class="fas fa-trophy"></i> Достижения</h2>
                 <div class="achievements-grid" id="achievements-grid">
-                    <!-- Achievements will be added here dynamically -->
+                    <!-- Достижения будут здесь -->
                 </div>
             </div>
         </main>
 
-        <nav class="tabs">
+        <nav class="tabs-nav">
             <button class="tab-btn active" data-tab="main-tab">
                 <i class="fas fa-sword"></i>
                 <span>Главная</span>
