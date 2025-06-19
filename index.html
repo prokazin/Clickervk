@@ -2,11 +2,30 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>STAR WARS Кликер</title>
+    <meta name="theme-color" content="#0a1a2f">
+    <style>
+        /* Critical CSS для быстрой загрузки */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a1a2f;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            touch-action: manipulation;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -29,71 +48,52 @@
         </header>
 
         <main>
-            <!-- Главная вкладка -->
             <div class="tab-content active" id="main-tab">
                 <div class="clicker-container">
                     <div class="clicker-display">
-                        <img src="/assets/lightsaber.png" alt="Световой меч" id="clicker" class="clickable">
-                        <div class="click-effect"></div>
+                        <img src="img/lightsaber.webp" alt="Меч" id="clicker" class="clickable" loading="lazy">
                     </div>
                     <div class="stats-display">
-                        <p>Кликов: <span id="click-count">0</span></p>
-                        <p>Доход: <span id="cps">0</span> кредитов/сек</p>
+                        <p><span id="cps">0</span> кредитов/сек</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Улучшения -->
             <div class="tab-content" id="upgrades-tab">
-                <h2><i class="fas fa-cog"></i> Улучшения</h2>
-                <div class="upgrades-grid" id="upgrades-grid">
-                    <!-- Улучшения будут загружены через JS -->
-                </div>
+                <div class="upgrades-grid" id="upgrades-grid"></div>
             </div>
 
-            <!-- Боссы -->
             <div class="tab-content" id="bosses-tab">
-                <h2><i class="fas fa-skull"></i> Боссы</h2>
-                <div class="bosses-grid" id="bosses-grid">
-                    <!-- Боссы будут загружены через JS -->
-                </div>
+                <div class="bosses-grid" id="bosses-grid"></div>
             </div>
 
-            <!-- Клан -->
             <div class="tab-content" id="clan-tab">
-                <h2><i class="fas fa-users"></i> Клан</h2>
-                <div class="clan-container" id="clan-container">
-                    <!-- Клан будет загружен через JS -->
-                </div>
+                <div class="clan-container" id="clan-container"></div>
             </div>
 
-            <!-- Достижения -->
             <div class="tab-content" id="achievements-tab">
-                <h2><i class="fas fa-trophy"></i> Достижения</h2>
-                <div class="achievements-grid" id="achievements-grid">
-                    <!-- Достижения будут загружены через JS -->
-                </div>
+                <div class="achievements-grid" id="achievements-grid"></div>
             </div>
         </main>
 
         <nav class="tabs-nav">
-            <button class="tab-btn active" data-tab="main-tab">
+            <button class="tab-btn active" data-tab="main-tab" aria-label="Главная">
                 <i class="fas fa-sword"></i>
                 <span>Главная</span>
             </button>
-            <button class="tab-btn" data-tab="upgrades-tab">
+            <button class="tab-btn" data-tab="upgrades-tab" aria-label="Улучшения">
                 <i class="fas fa-cog"></i>
                 <span>Улучшения</span>
             </button>
-            <button class="tab-btn" data-tab="bosses-tab">
+            <button class="tab-btn" data-tab="bosses-tab" aria-label="Боссы">
                 <i class="fas fa-skull"></i>
                 <span>Боссы</span>
             </button>
-            <button class="tab-btn" data-tab="clan-tab">
+            <button class="tab-btn" data-tab="clan-tab" aria-label="Клан">
                 <i class="fas fa-users"></i>
                 <span>Клан</span>
             </button>
-            <button class="tab-btn" data-tab="achievements-tab">
+            <button class="tab-btn" data-tab="achievements-tab" aria-label="Достижения">
                 <i class="fas fa-trophy"></i>
                 <span>Достижения</span>
             </button>
@@ -102,6 +102,6 @@
 
     <div class="notification" id="notification"></div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
