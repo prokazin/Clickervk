@@ -1,11 +1,12 @@
-// Game State
-const gameState = {
+// Игровые данные
+const game = {
     credits: 0,
     forcePoints: 0,
     level: 1,
     xp: 0,
     xpToNextLevel: 100,
     cps: 0,
+    clickPower: 1,
     upgrades: [
         { id: 1, name: "Дроид-уборщик", description: "Автоматически собирает кредиты", baseCost: 50, owned: 0, cps: 1 },
         { id: 2, name: "Торговый корабль", description: "Межгалактическая торговля", baseCost: 200, owned: 0, cps: 5 },
@@ -60,20 +61,19 @@ const gameState = {
     consecutiveDays: 0
 };
 
-// DOM Elements
+// DOM элементы
 const creditsDisplay = document.getElementById('credits');
-const forcePointsDisplay = document.getElementById('forcePoints');
-const playerLevelDisplay = document.getElementById('playerLevel');
+const forcePointsDisplay = document.getElementById('force-points');
+const levelDisplay = document.getElementById('level');
 const cpsDisplay = document.getElementById('cps');
-const lightsaber = document.getElementById('lightsaber');
-const clickEffect = document.getElementById('click-effect');
-const upgradesList = document.getElementById('upgrades-list');
+const clicker = document.getElementById('clicker');
+const upgradesGrid = document.getElementById('upgrades-grid');
 const achievementsGrid = document.getElementById('achievements-grid');
 const notification = document.getElementById('notification');
 const tabButtons = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 const createClanBtn = document.getElementById('create-clan-btn');
-const clanCreationSection = document.getElementById('clan-creation');
+const clanCreationForm = document.getElementById('clan-creation-form');
 const confirmClanBtn = document.getElementById('confirm-clan-btn');
 const clanNameInput = document.getElementById('clan-name');
 const noClanSection = document.getElementById('no-clan');
@@ -84,125 +84,108 @@ const clanTreasuryDisplay = document.getElementById('clan-treasury');
 const clanMembersList = document.getElementById('clan-members-list');
 const donateBtn = document.getElementById('donate-btn');
 const donationAmountInput = document.getElementById('donation-amount');
+const attackButtons = document.querySelectorAll('.attack-btn');
 
-// Initialize the game
+// Инициализация игры
 function initGame() {
     loadGame();
     setupTabs();
+    setupClicker();
     renderUpgrades();
     renderAchievements();
     updateBossesUI();
     setupClanUI();
-    setupClicker();
     startPassiveIncome();
     checkDailyReward();
-    
-    // Update UI
     updateUI();
 }
 
-// Setup tab navigation
+// Настройка вкладок
 function setupTabs() {
     tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const tabId = button.getAttribute('data-tab');
+            const tabId = button.dataset.tab;
             
-            // Hide all tabs
+            // Скрыть все вкладки
             tabContents.forEach(content => {
                 content.classList.remove('active');
             });
             
-            // Deactivate all buttons
+            // Убрать активный класс у всех кнопок
             tabButtons.forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Show selected tab
+            // Показать выбранную вкладку
             document.getElementById(tabId).classList.add('active');
             button.classList.add('active');
         });
     });
 }
 
-// Setup clicker functionality
+// Настройка кликера
 function setupClicker() {
-    lightsaber.addEventListener('click', (e) => {
-        // Calculate click position
-        const rect = lightsaber.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    clicker.addEventListener('click', (e) => {
+        // Создаем эффект клика
+        const clickEffect = document.createElement('div');
+        clickEffect.className = 'click-effect';
+        clickEffect.style.left = `${e.offsetX - 25}px`;
+        clickEffect.style.top = `${e.offsetY - 25}px`;
+        clicker.appendChild(clickEffect);
         
-        // Position click effect
-        clickEffect.style.left = `${x - 25}px`;
-        clickEffect.style.top = `${y - 25}px`;
-        
-        // Animate click effect
-        clickEffect.style.opacity = '1';
-        clickEffect.style.transform = 'scale(0)';
+        // Удаляем эффект после анимации
         setTimeout(() => {
-            clickEffect.style.opacity = '0';
-            clickEffect.style.transform = 'scale(2)';
-        }, 10);
+            clickEffect.remove();
+        }, 500);
         
-        // Add credits
-        const creditsEarned = 1 + Math.floor(gameState.level / 5);
-        gameState.credits += creditsEarned;
-        gameState.clickCount++;
+        // Добавляем кредиты
+        game.credits += game.clickPower;
+        game.clickCount++;
         
-        // Chance to get force points (1%)
+        // Шанс получить Очко Силы (1%)
         if (Math.random() < 0.01) {
-            gameState.forcePoints++;
-            showNotification(`+1 Очко Силы!`);
+            game.forcePoints++;
+            showNotification('+1 Очко Силы!');
         }
         
-        // Add XP
+        // Добавляем опыт
         addXP(1);
         
-        // Update UI
+        // Обновляем UI
         updateUI();
         
-        // Check achievements
+        // Проверяем достижения
         checkAchievements();
     });
 }
 
-// Start passive income
+// Пассивный доход
 function startPassiveIncome() {
     setInterval(() => {
-        if (gameState.cps > 0) {
-            gameState.credits += gameState.cps / 10;
+        if (game.cps > 0) {
+            game.credits += game.cps / 10;
             updateUI();
         }
     }, 100);
 }
 
-// Update all UI elements
+// Обновление UI
 function updateUI() {
-    creditsDisplay.textContent = formatNumber(gameState.credits);
-    forcePointsDisplay.textContent = formatNumber(gameState.forcePoints);
-    cpsDisplay.textContent = formatNumber(gameState.cps);
+    creditsDisplay.textContent = formatNumber(game.credits);
+    forcePointsDisplay.textContent = formatNumber(game.forcePoints);
+    cpsDisplay.textContent = formatNumber(game.cps);
     
-    // Update player level display
+    // Обновляем уровень игрока
     const levelTitles = [
         "Падаван", "Рыцарь-джедай", "Магистр-джедай", "Член Совета", 
         "Мастер-джедай", "Гранд-мастер", "Избранный", "Ситх", 
         "Лорд ситхов", "Темный лорд"
     ];
-    const titleIndex = Math.min(Math.floor(gameState.level / 3), levelTitles.length - 1);
-    playerLevelDisplay.textContent = `${levelTitles[titleIndex]} (Ур. ${gameState.level})`;
-    
-    // Update upgrades UI
-    renderUpgrades();
-    
-    // Update clan UI if in clan
-    if (gameState.clan) {
-        clanNameDisplay.textContent = gameState.clan.name;
-        clanLevelDisplay.textContent = gameState.clan.level;
-        clanTreasuryDisplay.textContent = formatNumber(gameState.clan.treasury);
-    }
+    const titleIndex = Math.min(Math.floor(game.level / 3), levelTitles.length - 1);
+    levelDisplay.textContent = `${levelTitles[titleIndex]} (${game.level})`;
 }
 
-// Format large numbers
+// Форматирование чисел
 function formatNumber(num) {
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + 'M';
@@ -213,17 +196,17 @@ function formatNumber(num) {
     return Math.floor(num);
 }
 
-// Render upgrades
+// Рендер улучшений
 function renderUpgrades() {
-    upgradesList.innerHTML = '';
+    upgradesGrid.innerHTML = '';
     
-    gameState.upgrades.forEach(upgrade => {
+    game.upgrades.forEach(upgrade => {
         const cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
-        const canAfford = gameState.credits >= cost;
+        const canAfford = game.credits >= cost;
         
-        const upgradeElement = document.createElement('div');
-        upgradeElement.className = 'upgrade';
-        upgradeElement.innerHTML = `
+        const upgradeCard = document.createElement('div');
+        upgradeCard.className = 'upgrade-card';
+        upgradeCard.innerHTML = `
             <h3>${upgrade.name}</h3>
             <p>${upgrade.description}</p>
             <p>+${upgrade.cps} кредитов/сек</p>
@@ -232,103 +215,103 @@ function renderUpgrades() {
             <button ${!canAfford ? 'disabled' : ''}>Купить</button>
         `;
         
-        const button = upgradeElement.querySelector('button');
+        const button = upgradeCard.querySelector('button');
         button.addEventListener('click', () => {
             buyUpgrade(upgrade.id);
         });
         
-        upgradesList.appendChild(upgradeElement);
+        upgradesGrid.appendChild(upgradeCard);
     });
 }
 
-// Buy upgrade
+// Покупка улучшения
 function buyUpgrade(upgradeId) {
-    const upgrade = gameState.upgrades.find(u => u.id === upgradeId);
+    const upgrade = game.upgrades.find(u => u.id === upgradeId);
     const cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
     
-    if (gameState.credits >= cost) {
-        gameState.credits -= cost;
+    if (game.credits >= cost) {
+        game.credits -= cost;
         upgrade.owned++;
         
-        // Recalculate CPS
-        gameState.cps = gameState.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
+        // Пересчитываем CPS
+        game.cps = game.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
         
-        // Add XP
+        // Добавляем опыт
         addXP(5);
         
-        // Update UI
+        // Обновляем UI
         updateUI();
         showNotification(`Куплено: ${upgrade.name}`);
         
-        // Check achievements
+        // Проверяем достижения
         checkAchievements();
     }
 }
 
-// Render achievements
+// Рендер достижений
 function renderAchievements() {
     achievementsGrid.innerHTML = '';
     
-    gameState.achievements.forEach(achievement => {
+    game.achievements.forEach(achievement => {
         const achieved = achievement.achieved;
         const progress = getAchievementProgress(achievement);
         
-        const achievementElement = document.createElement('div');
-        achievementElement.className = `achievement ${achieved ? '' : 'locked'}`;
-        achievementElement.innerHTML = `
+        const achievementCard = document.createElement('div');
+        achievementCard.className = `achievement-card ${achieved ? '' : 'locked'}`;
+        achievementCard.innerHTML = `
             <img src="achievement_${achievement.id}.png" alt="${achievement.name}">
             <h4>${achievement.name}</h4>
             <p>${achievement.description}</p>
             ${!achieved ? `<p>Прогресс: ${progress}/${achievement.goal}</p>` : ''}
         `;
         
-        achievementsGrid.appendChild(achievementElement);
+        achievementsGrid.appendChild(achievementCard);
     });
 }
 
-// Get achievement progress
+// Получение прогресса достижения
 function getAchievementProgress(achievement) {
     switch(achievement.id) {
         case 1: case 2: case 3: case 4: case 5:
-            return Math.min(gameState.credits, achievement.goal);
+            return Math.min(game.credits, achievement.goal);
         case 6: case 7: case 8: case 9:
-            return Math.min(gameState.forcePoints, achievement.goal);
+            return Math.min(game.forcePoints, achievement.goal);
         case 10: case 11: case 12: case 13:
-            return Math.min(gameState.level, achievement.goal);
+            return Math.min(game.level, achievement.goal);
         case 14: case 15: case 16: case 17:
-            const ownedUpgrades = gameState.upgrades.reduce((total, u) => total + u.owned, 0);
+            const ownedUpgrades = game.upgrades.reduce((total, u) => total + u.owned, 0);
             return Math.min(ownedUpgrades, achievement.goal);
         case 18:
-            return gameState.bosses[0].currentHealth <= 0 ? 1 : 0;
+            return game.bosses[0].currentHealth <= 0 ? 1 : 0;
         case 19:
-            return gameState.bosses[1].currentHealth <= 0 ? 1 : 0;
+            return game.bosses[1].currentHealth <= 0 ? 1 : 0;
         case 20:
-            return gameState.bosses[2].currentHealth <= 0 ? 1 : 0;
+            return game.bosses[2].currentHealth <= 0 ? 1 : 0;
         case 21:
-            return gameState.clan ? 1 : 0;
+            return game.clan ? 1 : 0;
         case 22: case 23:
-            return gameState.clan ? Math.min(gameState.clan.totalDonations, achievement.goal) : 0;
+            return game.clan ? Math.min(game.clan.totalDonations, achievement.goal) : 0;
         case 24: case 25:
-            return gameState.clan ? Math.min(gameState.clan.level, achievement.goal) : 0;
+            return game.clan ? Math.min(game.clan.level, achievement.goal) : 0;
         case 26: case 27: case 28:
-            return Math.min(gameState.consecutiveDays, achievement.goal);
+            return Math.min(game.consecutiveDays, achievement.goal);
         case 29: case 30:
-            return Math.min(gameState.clickCount, achievement.goal);
+            return Math.min(game.clickCount, achievement.goal);
         default:
             return 0;
     }
 }
 
-// Check achievements
+// Проверка достижений
 function checkAchievements() {
     let newAchievements = 0;
     
-    gameState.achievements.forEach(achievement => {
+    game.achievements.forEach(achievement => {
         if (!achievement.achieved) {
             const progress = getAchievementProgress(achievement);
             if (progress >= achievement.goal) {
                 achievement.achieved = true;
-                gameState.credits += achievement.reward;
+                game.credits += achievement.reward;
                 newAchievements++;
                 showNotification(`Достижение: ${achievement.name}! +${achievement.reward} кредитов`);
             }
@@ -341,73 +324,76 @@ function checkAchievements() {
     }
 }
 
-// Add XP
+// Добавление опыта
 function addXP(amount) {
-    gameState.xp += amount;
+    game.xp += amount;
     
-    // Check for level up
-    while (gameState.xp >= gameState.xpToNextLevel) {
-        gameState.xp -= gameState.xpToNextLevel;
-        gameState.level++;
-        gameState.xpToNextLevel = Math.floor(gameState.xpToNextLevel * 1.2);
-        showNotification(`Уровень повышен! Теперь вы ${playerLevelDisplay.textContent}`);
+    // Проверка повышения уровня
+    while (game.xp >= game.xpToNextLevel) {
+        game.xp -= game.xpToNextLevel;
+        game.level++;
+        game.xpToNextLevel = Math.floor(game.xpToNextLevel * 1.2);
+        showNotification(`Уровень повышен! Теперь вы ${levelDisplay.textContent}`);
     }
 }
 
-// Update bosses UI
+// Обновление UI боссов
 function updateBossesUI() {
-    gameState.bosses.forEach(boss => {
-        const bossElement = document.getElementById(`boss-${boss.id}`);
+    game.bosses.forEach(boss => {
+        const bossElement = document.getElementById(`${boss.name.toLowerCase().replace(' ', '-')}-boss`);
         if (bossElement) {
-            const healthBar = bossElement.querySelector('.health-bar');
+            const healthBar = bossElement.querySelector('.health');
             const healthPercent = (boss.currentHealth / boss.maxHealth) * 100;
             healthBar.style.width = `${healthPercent}%`;
             
             const attackBtn = bossElement.querySelector('.attack-btn');
             attackBtn.textContent = `Атаковать (${boss.forceCost} ОС)`;
-            attackBtn.disabled = gameState.forcePoints < boss.forceCost || boss.currentHealth <= 0;
-            
-            attackBtn.onclick = () => attackBoss(boss.id);
+            attackBtn.disabled = game.forcePoints < boss.forceCost || boss.currentHealth <= 0;
         }
     });
 }
 
-// Attack boss
+// Атака босса
 function attackBoss(bossId) {
-    const boss = gameState.bosses.find(b => b.id === bossId);
+    const boss = game.bosses.find(b => b.id === bossId);
     
-    if (gameState.forcePoints >= boss.forceCost && boss.currentHealth > 0) {
-        gameState.forcePoints -= boss.forceCost;
+    if (game.forcePoints >= boss.forceCost && boss.currentHealth > 0) {
+        game.forcePoints -= boss.forceCost;
         
-        // Damage calculation based on player level
-        const damage = 50 + (gameState.level * 5);
+        // Расчет урона в зависимости от уровня игрока
+        const damage = 50 + (game.level * 5);
         boss.currentHealth = Math.max(0, boss.currentHealth - damage);
         
-        // Check if boss defeated
+        // Проверка победы над боссом
         if (boss.currentHealth <= 0) {
-            gameState.credits += boss.reward;
+            game.credits += boss.reward;
             showNotification(`Босс побежден! +${boss.reward} кредитов`);
             
-            // Add XP
+            // Добавляем опыт
             addXP(20);
         }
         
-        // Update UI
+        // Обновляем UI
         updateUI();
         updateBossesUI();
         checkAchievements();
     }
 }
 
-// Setup clan UI
+// Настройка UI клана
 function setupClanUI() {
-    if (gameState.clan) {
+    if (game.clan) {
         noClanSection.style.display = 'none';
         hasClanSection.style.display = 'block';
         
-        // Update clan members list
+        // Обновляем информацию о клане
+        clanNameDisplay.textContent = game.clan.name;
+        clanLevelDisplay.textContent = game.clan.level;
+        clanTreasuryDisplay.textContent = formatNumber(game.clan.treasury);
+        
+        // Обновляем список участников
         clanMembersList.innerHTML = '';
-        gameState.clan.members.forEach(member => {
+        game.clan.members.forEach(member => {
             const li = document.createElement('li');
             li.textContent = member;
             clanMembersList.appendChild(li);
@@ -417,10 +403,10 @@ function setupClanUI() {
         hasClanSection.style.display = 'none';
     }
     
-    // Clan creation
+    // Создание клана
     createClanBtn.addEventListener('click', () => {
-        if (gameState.credits >= 5000) {
-            clanCreationSection.style.display = 'block';
+        if (game.credits >= 5000) {
+            clanCreationForm.style.display = 'block';
         } else {
             showNotification('Недостаточно кредитов (нужно 5,000)');
         }
@@ -429,8 +415,8 @@ function setupClanUI() {
     confirmClanBtn.addEventListener('click', () => {
         const clanName = clanNameInput.value.trim();
         if (clanName.length >= 3 && clanName.length <= 20) {
-            gameState.credits -= 5000;
-            gameState.clan = {
+            game.credits -= 5000;
+            game.clan = {
                 name: clanName,
                 level: 1,
                 treasury: 0,
@@ -438,44 +424,44 @@ function setupClanUI() {
                 members: ['Вы']
             };
             
-            clanCreationSection.style.display = 'none';
+            clanCreationForm.style.display = 'none';
             clanNameInput.value = '';
             setupClanUI();
             updateUI();
             showNotification(`Клан "${clanName}" создан!`);
             
-            // Add XP
+            // Добавляем опыт
             addXP(10);
             
-            // Check achievements
+            // Проверяем достижения
             checkAchievements();
         } else {
             showNotification('Название клана должно быть от 3 до 20 символов');
         }
     });
     
-    // Donations
+    // Пожертвования в клан
     donateBtn.addEventListener('click', () => {
         const amount = parseInt(donationAmountInput.value);
-        if (amount >= 1000 && gameState.credits >= amount) {
-            gameState.credits -= amount;
-            gameState.clan.treasury += amount;
-            gameState.clan.totalDonations += amount;
+        if (amount >= 1000 && game.credits >= amount) {
+            game.credits -= amount;
+            game.clan.treasury += amount;
+            game.clan.totalDonations += amount;
             
-            // Check for clan level up (10,000 credits per level)
-            const levelsGained = Math.floor(gameState.clan.treasury / 10000) - (gameState.clan.level - 1);
+            // Проверка повышения уровня клана (10,000 кредитов за уровень)
+            const levelsGained = Math.floor(game.clan.treasury / 10000) - (game.clan.level - 1);
             if (levelsGained > 0) {
-                gameState.clan.level += levelsGained;
-                showNotification(`Клан повышен до уровня ${gameState.clan.level}!`);
+                game.clan.level += levelsGained;
+                showNotification(`Клан повышен до уровня ${game.clan.level}!`);
             }
             
             updateUI();
             showNotification(`Пожертвовано ${amount} кредитов в клан`);
             
-            // Add XP
+            // Добавляем опыт
             addXP(2);
             
-            // Check achievements
+            // Проверяем достижения
             checkAchievements();
         } else {
             showNotification('Минимальное пожертвование - 1,000 кредитов');
@@ -483,7 +469,7 @@ function setupClanUI() {
     });
 }
 
-// Show notification
+// Показать уведомление
 function showNotification(message) {
     notification.textContent = message;
     notification.style.opacity = '1';
@@ -493,54 +479,62 @@ function showNotification(message) {
     }, 3000);
 }
 
-// Check daily reward
+// Проверка ежедневной награды
 function checkDailyReward() {
     const today = new Date().toDateString();
     
-    if (gameState.lastPlayDate !== today) {
+    if (game.lastPlayDate !== today) {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         
-        if (gameState.lastPlayDate === yesterday.toDateString()) {
-            gameState.consecutiveDays++;
-        } else if (gameState.lastPlayDate !== today) {
-            gameState.consecutiveDays = 1;
+        if (game.lastPlayDate === yesterday.toDateString()) {
+            game.consecutiveDays++;
+        } else if (game.lastPlayDate !== today) {
+            game.consecutiveDays = 1;
         }
         
-        gameState.lastPlayDate = today;
+        game.lastPlayDate = today;
         
-        // Calculate reward (100 * 1.1^consecutiveDays)
-        const reward = Math.floor(100 * Math.pow(1.1, gameState.consecutiveDays - 1));
-        gameState.credits += reward;
+        // Расчет награды (100 * 1.1^consecutiveDays)
+        const reward = Math.floor(100 * Math.pow(1.1, game.consecutiveDays - 1));
+        game.credits += reward;
         
-        showNotification(`Ежедневная награда: ${reward} кредитов (День ${gameState.consecutiveDays})`);
+        showNotification(`Ежедневная награда: ${reward} кредитов (День ${game.consecutiveDays})`);
         updateUI();
         checkAchievements();
     }
 }
 
-// Save game
+// Сохранение игры
 function saveGame() {
-    localStorage.setItem('starWarsClicker', JSON.stringify(gameState));
+    localStorage.setItem('starWarsClicker', JSON.stringify(game));
 }
 
-// Load game
+// Загрузка игры
 function loadGame() {
     const savedGame = localStorage.getItem('starWarsClicker');
     if (savedGame) {
         const parsed = JSON.parse(savedGame);
-        Object.assign(gameState, parsed);
+        Object.assign(game, parsed);
         
-        // Recalculate CPS in case the formula changed
-        gameState.cps = gameState.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
+        // Пересчет CPS на случай изменения формулы
+        game.cps = game.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
     }
 }
 
-// Auto-save every 30 seconds
+// Автосохранение каждые 30 секунд
 setInterval(saveGame, 30000);
 
-// Save on page unload
+// Сохранение при закрытии страницы
 window.addEventListener('beforeunload', saveGame);
 
-// Initialize the game when DOM is loaded
+// Назначение обработчиков атаки боссов
+document.querySelectorAll('.attack-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const bossId = parseInt(this.parentElement.id.split('-')[1]);
+        attackBoss(bossId);
+    });
+});
+
+// Инициализация игры при загрузке страницы
 document.addEventListener('DOMContentLoaded', initGame);
