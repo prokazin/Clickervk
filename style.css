@@ -1,25 +1,34 @@
 /* Основные стили */
+:root {
+    --gold: #ffe81f;
+    --dark-blue: #0a1a2f;
+    --light-blue: #4fc3f7;
+    --red: #e53935;
+    --green: #43a047;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Orbitron', sans-serif;
 }
 
 body {
-    background-color: #121212;
+    background-color: #000;
     color: #fff;
     min-height: 100vh;
-    background-image: url(/assets/background.jpg);
+    background-image: url'/assets/background.png');
     background-size: cover;
     background-attachment: fixed;
+    background-position: center;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(10, 26, 47, 0.9);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -29,43 +38,48 @@ header {
     text-align: center;
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #333;
+    border-bottom: 2px solid var(--gold);
 }
 
 .game-title {
-    font-family: 'Star Jedi', Arial, sans-serif;
-    color: #ffe81f;
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    text-shadow: 0 0 10px #ffe81f;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--gold);
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--gold);
+    letter-spacing: 2px;
 }
 
 .player-stats {
     display: flex;
     justify-content: space-around;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .stat {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
+    font-size: 1.1rem;
 }
 
-.stat i {
-    color: #ffe81f;
-}
+.gold { color: var(--gold); }
+.blue { color: var(--light-blue); }
+.green { color: var(--green); }
+.red { color: var(--red); }
 
 /* Стили вкладок */
 .tabs-nav {
     display: flex;
     justify-content: space-around;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 10px 0;
-    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 12px 0;
+    border-radius: 10px;
     margin-top: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .tab-btn {
@@ -76,32 +90,41 @@ header {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     padding: 5px 10px;
     transition: all 0.3s;
+    border-radius: 5px;
 }
 
 .tab-btn i {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 5px;
 }
 
 .tab-btn.active {
-    color: #ffe81f;
+    color: var(--gold);
+    background-color: rgba(255, 232, 31, 0.1);
     transform: translateY(-5px);
+    text-shadow: 0 0 5px var(--gold);
 }
 
 .tab-content {
     display: none;
     flex: 1;
-    padding: 15px 0;
+    padding: 20px 0;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .tab-content.active {
     display: block;
 }
 
-/* Стили кликера */
+/* Главная вкладка */
 .clicker-container {
     display: flex;
     flex-direction: column;
@@ -109,23 +132,29 @@ header {
     margin-top: 20px;
 }
 
+.clicker-display {
+    position: relative;
+    margin-bottom: 25px;
+}
+
 .clickable {
-    width: 150px;
-    height: 150px;
+    width: 180px;
+    height: 180px;
     cursor: pointer;
-    transition: transform 0.1s;
-    margin-bottom: 20px;
+    transition: all 0.1s;
+    filter: drop-shadow(0 0 10px var(--gold));
 }
 
 .clickable:active {
     transform: scale(0.95);
+    filter: drop-shadow(0 0 15px var(--gold));
 }
 
 .click-effect {
     position: absolute;
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 232, 31, 0.5);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     opacity: 0;
@@ -144,218 +173,381 @@ header {
     }
 }
 
-.cps-display {
-    font-size: 1.1rem;
-    color: #ffe81f;
-}
-
-/* Стили улучшений */
-.upgrades-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
+.stats-display {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--light-blue);
     margin-top: 15px;
 }
 
-.upgrade-card {
-    background-color: rgba(30, 30, 30, 0.8);
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 3px solid #ffe81f;
-}
-
-.upgrade-card h3 {
-    color: #ffe81f;
-    margin-bottom: 10px;
-}
-
-.upgrade-card p {
+.stats-display p {
     margin-bottom: 8px;
-    font-size: 0.9rem;
 }
 
-.upgrade-card button {
-    background-color: #ffe81f;
-    color: #000;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.upgrade-card button:disabled {
-    background-color: #666;
-    cursor: not-allowed;
-}
-
-/* Стили боссов */
-.bosses-grid {
+/* Вкладка улучшений */
+.upgrades-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     margin-top: 20px;
 }
 
+.upgrade-card {
+    background: linear-gradient(135deg, rgba(20, 30, 50, 0.8) 0%, rgba(10, 20, 40, 0.9) 100%);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.upgrade-card:hover {
+    transform: translateY(-5px);
+}
+
+.upgrade-card h3 {
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+}
+
+.upgrade-card p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.upgrade-card .upgrade-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    font-size: 0.9rem;
+}
+
+.upgrade-card button {
+    width: 100%;
+    background-color: var(--gold);
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.upgrade-card button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.upgrade-card button:hover:not(:disabled) {
+    background-color: #ffd700;
+    box-shadow: 0 0 10px var(--gold);
+}
+
+/* Вкладка боссов */
+.bosses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
 .boss-card {
-    background-color: rgba(30, 0, 0, 0.8);
-    padding: 15px;
-    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(50, 0, 0, 0.8) 0%, rgba(30, 0, 0, 0.9) 100%);
+    padding: 20px;
+    border-radius: 10px;
     text-align: center;
-    border: 1px solid #f00;
+    border: 2px solid var(--red);
+    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.2);
 }
 
 .boss-card img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    margin-bottom: 10px;
-    border: 2px solid #f00;
+    margin-bottom: 15px;
+    border: 3px solid var(--red);
+    box-shadow: 0 0 15px var(--red);
 }
 
 .boss-card h3 {
-    color: #f00;
-    margin-bottom: 10px;
+    color: var(--red);
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    text-shadow: 0 0 5px var(--red);
+}
+
+.health-container {
+    margin: 15px 0;
+}
+
+.health-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
 }
 
 .health-bar {
     background-color: #333;
     height: 20px;
     border-radius: 10px;
-    margin: 10px 0;
     overflow: hidden;
 }
 
 .health {
     height: 100%;
-    background-color: #f00;
-    transition: width 0.3s;
+    background: linear-gradient(90deg, #f00 0%, #ff6b6b 100%);
+    transition: width 0.5s;
 }
 
 .attack-btn {
-    background-color: #f00;
+    width: 100%;
+    background: linear-gradient(135deg, var(--red) 0%, #c62828 100%);
     color: #fff;
     border: none;
-    padding: 8px 15px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
     transition: all 0.3s;
+    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .attack-btn:disabled {
-    background-color: #666;
+    background: #555;
     cursor: not-allowed;
 }
 
-/* Стили клана */
+.attack-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #ff3d3d 0%, #d32f2f 100%);
+    box-shadow: 0 0 10px var(--red);
+}
+
+/* Вкладка клана */
 .clan-container {
-    background-color: rgba(30, 30, 30, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 15px;
+    background: linear-gradient(135deg, rgba(20, 40, 60, 0.8) 0%, rgba(10, 25, 50, 0.9) 100%);
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 20px;
+    border: 2px solid var(--light-blue);
 }
 
-#no-clan, #has-clan {
+.clan-header {
     text-align: center;
+    margin-bottom: 20px;
 }
 
-#clan-creation-form {
-    margin-top: 15px;
+.clan-header h3 {
+    color: var(--light-blue);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px var(--light-blue);
+}
+
+.clan-stats {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-around;
+    margin-bottom: 20px;
 }
 
-#clan-creation-form input {
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
+.clan-stat {
     text-align: center;
 }
 
-#create-clan-btn, #confirm-clan-btn, #donate-btn {
-    background-color: #ffe81f;
-    color: #000;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s;
+.clan-stat p:first-child {
+    color: var(--gold);
+    font-size: 0.9rem;
 }
 
-#create-clan-btn:disabled, #confirm-clan-btn:disabled {
-    background-color: #666;
-    cursor: not-allowed;
+.clan-stat p:last-child {
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .clan-members {
-    margin-top: 20px;
-    text-align: left;
+    margin-top: 25px;
+}
+
+.clan-members h4 {
+    color: var(--light-blue);
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid var(--light-blue);
+    padding-bottom: 5px;
 }
 
 .clan-members ul {
     list-style-type: none;
-    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .clan-members li {
-    padding: 8px 0;
-    border-bottom: 1px solid #333;
+    padding: 10px;
+    border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+    display: flex;
+    justify-content: space-between;
+}
+
+.clan-members li:last-child {
+    border-bottom: none;
 }
 
 .donate-section {
-    margin-top: 20px;
+    margin-top: 25px;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.donate-section h4 {
+    color: var(--gold);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.donate-controls {
     display: flex;
     gap: 10px;
 }
 
-.donate-section input {
-    padding: 8px;
+.donate-controls input {
+    flex: 1;
+    padding: 10px;
     border-radius: 5px;
     border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
     text-align: center;
-    flex: 1;
+    font-size: 1rem;
 }
 
-/* Стили достижений */
+.donate-controls button {
+    background: linear-gradient(135deg, var(--gold) 0%, #ffd700 100%);
+    color: #000;
+    border: none;
+    padding: 0 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-width: 120px;
+}
+
+.donate-controls button:hover {
+    background: linear-gradient(135deg, #ffeb3b 0%, #fbc02d 100%);
+    box-shadow: 0 0 10px var(--gold);
+}
+
+.create-clan-form {
+    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.create-clan-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.create-clan-form button {
+    background: linear-gradient(135deg, var(--green) 0%, #2e7d32 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.create-clan-form button:hover {
+    background: linear-gradient(135deg, #66bb6a 0%, #388e3c 100%);
+    box-shadow: 0 0 10px var(--green);
+}
+
+/* Вкладка достижений */
 .achievements-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .achievement-card {
-    background-color: rgba(30, 30, 30, 0.8);
-    padding: 10px;
-    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(30, 50, 30, 0.8) 0%, rgba(20, 40, 20, 0.9) 100%);
+    padding: 15px;
+    border-radius: 10px;
     text-align: center;
     position: relative;
+    border: 2px solid var(--green);
+    transition: all 0.3s;
 }
 
 .achievement-card.locked {
     filter: grayscale(80%);
     opacity: 0.7;
+    border-color: #555;
+}
+
+.achievement-card.unlocked {
+    box-shadow: 0 0 15px var(--green);
 }
 
 .achievement-card img {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 5px;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--green);
 }
 
 .achievement-card h4 {
-    font-size: 0.8rem;
-    margin-bottom: 5px;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .achievement-card p {
-    font-size: 0.7rem;
-    color: #ffe81f;
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 5px;
+}
+
+.achievement-card .reward {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.achievement-card .progress {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: var(--light-blue);
 }
 
 /* Уведомления */
@@ -365,20 +557,35 @@ header {
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(0, 0, 0, 0.9);
-    color: #ffe81f;
-    padding: 10px 20px;
+    color: var(--gold);
+    padding: 12px 25px;
     border-radius: 5px;
     z-index: 1000;
     opacity: 0;
     transition: opacity 0.3s;
-    border: 1px solid #ffe81f;
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 15px rgba(255, 232, 31, 0.5);
+    max-width: 90%;
+    text-align: center;
 }
 
 /* Адаптивность */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .game-title {
+        font-size: 2.2rem;
+    }
+    
     .player-stats {
         flex-direction: column;
         gap: 10px;
+    }
+    
+    .stat {
+        justify-content: center;
     }
     
     .upgrades-grid, .bosses-grid {
@@ -396,5 +603,33 @@ header {
     .tab-btn {
         flex: 1 0 45%;
         margin: 5px;
+    }
+    
+    .clickable {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-btn {
+        flex: 1 0 100%;
+        margin: 2px;
+    }
+    
+    .donate-controls {
+        flex-direction: column;
+    }
+    
+    .donate-controls button {
+        width: 100%;
     }
 }
