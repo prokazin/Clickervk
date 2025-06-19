@@ -1,367 +1,546 @@
-// Инициализация Telegram WebApp
-const tg = window.Telegram.WebApp;
-tg.expand();
-
-// Состояние игры
+// Game State
 const gameState = {
-    credits: 1000,
+    credits: 0,
     forcePoints: 0,
-    clickPower: 1,
-    creditsPerSecond: 0,
     level: 1,
-    totalClicks: 0,
+    xp: 0,
+    xpToNextLevel: 100,
+    cps: 0,
     upgrades: [
-        { id: 1, name: 'Дроид', cost: 15, power: 0.1, owned: 0, icon: 'fa-robot' },
-        { id: 2, name: 'Генератор', cost: 100, power: 1, owned: 0, icon: 'fa-bolt' },
-        { id: 3, name: 'Меч', cost: 50, power: 1, owned: 0, icon: 'fa-sword' },
-        { id: 4, name: 'Флот', cost: 500, power: 5, owned: 0, icon: 'fa-space-shuttle' },
-        { id: 5, name: 'Сила', cost: 1000, power: 2, owned: 0, icon: 'fa-jedi', multiplier: true }
+        { id: 1, name: "Дроид-уборщик", description: "Автоматически собирает кредиты", baseCost: 50, owned: 0, cps: 1 },
+        { id: 2, name: "Торговый корабль", description: "Межгалактическая торговля", baseCost: 200, owned: 0, cps: 5 },
+        { id: 3, name: "Дроид-астромеханик", description: "Ремонтирует технику за кредиты", baseCost: 500, owned: 0, cps: 10 },
+        { id: 4, name: "Шахта спайса", description: "Добыча ценного ресурса", baseCost: 1000, owned: 0, cps: 20 },
+        { id: 5, name: "Звездолет", description: "Перевозка грузов между системами", baseCost: 5000, owned: 0, cps: 50 },
+        { id: 6, name: "Космическая станция", description: "Торговый хаб", baseCost: 10000, owned: 0, cps: 100 },
+        { id: 7, name: "Планетарная колония", description: "Добыча ресурсов с планеты", baseCost: 50000, owned: 0, cps: 500 },
+        { id: 8, name: "Звездный разрушитель", description: "Военная мощь Империи", baseCost: 100000, owned: 0, cps: 1000 },
+        { id: 9, name: "Смертельная Звезда", description: "Ультимативное оружие", baseCost: 1000000, owned: 0, cps: 10000 }
+    ],
+    achievements: [
+        { id: 1, name: "Первые кредиты", description: "Заработать 100 кредитов", goal: 100, achieved: false, reward: 10 },
+        { id: 2, name: "Новичок", description: "Заработать 1,000 кредитов", goal: 1000, achieved: false, reward: 50 },
+        { id: 3, name: "Опытный", description: "Заработать 10,000 кредитов", goal: 10000, achieved: false, reward: 100 },
+        { id: 4, name: "Профессионал", description: "Заработать 100,000 кредитов", goal: 100000, achieved: false, reward: 500 },
+        { id: 5, name: "Магнат", description: "Заработать 1,000,000 кредитов", goal: 1000000, achieved: false, reward: 1000 },
+        { id: 6, name: "Первая Сила", description: "Получить 1 Очко Силы", goal: 1, achieved: false, reward: 100 },
+        { id: 7, name: "Чувствительный", description: "Получить 10 Очков Силы", goal: 10, achieved: false, reward: 500 },
+        { id: 8, name: "Джедай", description: "Получить 50 Очков Силы", goal: 50, achieved: false, reward: 1000 },
+        { id: 9, name: "Мастер-джедай", description: "Получить 100 Очков Силы", goal: 100, achieved: false, reward: 5000 },
+        { id: 10, name: "Падаван", description: "Достигнуть 5 уровня", goal: 5, achieved: false, reward: 200 },
+        { id: 11, name: "Рыцарь-джедай", description: "Достигнуть 10 уровня", goal: 10, achieved: false, reward: 500 },
+        { id: 12, name: "Магистр", description: "Достигнуть 20 уровня", goal: 20, achieved: false, reward: 2000 },
+        { id: 13, name: "Совет джедаев", description: "Достигнуть 30 уровня", goal: 30, achieved: false, reward: 5000 },
+        { id: 14, name: "Первое улучшение", description: "Купить любое улучшение", goal: 1, achieved: false, reward: 50 },
+        { id: 15, name: "Коллекционер", description: "Купить 5 улучшений", goal: 5, achieved: false, reward: 200 },
+        { id: 16, name: "Инвестор", description: "Купить 10 улучшений", goal: 10, achieved: false, reward: 500 },
+        { id: 17, name: "Тайкун", description: "Купить все улучшения", goal: 9, achieved: false, reward: 1000 },
+        { id: 18, name: "Охотник за головами", description: "Победить Дарта Вейдера", goal: 1, achieved: false, reward: 500 },
+        { id: 19, name: "Ситх", description: "Победить Дарта Мола", goal: 1, achieved: false, reward: 1000 },
+        { id: 20, name: "Избранный", description: "Победить Оби-Вана Кеноби", goal: 1, achieved: false, reward: 2000 },
+        { id: 21, name: "Клановая система", description: "Создать или вступить в клан", goal: 1, achieved: false, reward: 300 },
+        { id: 22, name: "Щедрый", description: "Пожертвовать 10,000 кредитов в клан", goal: 10000, achieved: false, reward: 500 },
+        { id: 23, name: "Меценат", description: "Пожертвовать 100,000 кредитов в клан", goal: 100000, achieved: false, reward: 2000 },
+        { id: 24, name: "Лидер", description: "Поднять клан до 5 уровня", goal: 5, achieved: false, reward: 1000 },
+        { id: 25, name: "Легенда", description: "Поднять клан до 10 уровня", goal: 10, achieved: false, reward: 5000 },
+        { id: 26, name: "Ежедневный игрок", description: "Зайти в игру 3 дня подряд", goal: 3, achieved: false, reward: 300 },
+        { id: 27, name: "Преданный", description: "Зайти в игру 7 дней подряд", goal: 7, achieved: false, reward: 700 },
+        { id: 28, name: "Фанат", description: "Зайти в игру 30 дней подряд", goal: 30, achieved: false, reward: 3000 },
+        { id: 29, name: "Мастер кликера", description: "Сделать 1,000 кликов", goal: 1000, achieved: false, reward: 500 },
+        { id: 30, name: "Абсолютный мастер", description: "Сделать 10,000 кликов", goal: 10000, achieved: false, reward: 5000 }
     ],
     bosses: [
-        { id: 1, name: 'Дарт Мол', health: 1000, reward: 5000, forceReward: 5, defeated: false, icon: 'fa-user-injured' },
-        { id: 2, name: 'Дарт Вейдер', health: 5000, reward: 25000, forceReward: 25, defeated: false, icon: 'fa-mask' }
+        { id: 1, name: "Дарт Вейдер", maxHealth: 1000, currentHealth: 1000, reward: 5000, forceCost: 100 },
+        { id: 2, name: "Дарт Мол", maxHealth: 2500, currentHealth: 2500, reward: 15000, forceCost: 250 },
+        { id: 3, name: "Оби-Ван Кеноби", maxHealth: 5000, currentHealth: 5000, reward: 30000, forceCost: 500 }
     ],
     clan: null,
-    clans: [],
-    dailyReward: {
-        lastClaimed: null,
-        streak: 0,
-        nextReward: 100
-    },
-    achievements: [
-        { id: 1, name: 'Начало', desc: 'Заработать 100 кредитов', target: 100, reward: 10, progress: 0, unlocked: false, icon: 'fa-star' },
-        { id: 2, name: 'Улучшения', desc: 'Купить 5 улучшений', target: 5, reward: 20, progress: 0, unlocked: false, icon: 'fa-cogs' },
-        { id: 3, name: 'Победитель', desc: 'Победить босса', target: 1, reward: 50, progress: 0, unlocked: false, icon: 'fa-trophy' }
-    ]
+    clickCount: 0,
+    lastPlayDate: null,
+    consecutiveDays: 0
 };
 
-// DOM элементы
-const elements = {
-    credits: document.querySelector('#credits span'),
-    forcePoints: document.querySelector('#force-points span'),
-    level: document.querySelector('#level span'),
-    lightsaber: document.getElementById('lightsaber'),
-    clickEffect: document.getElementById('click-effect'),
-    clickPower: document.getElementById('click-power'),
-    cps: document.querySelector('#cps span'),
-    upgradesContainer: document.getElementById('upgrades-container'),
-    bossesContainer: document.getElementById('bosses-container'),
-    clanName: document.getElementById('clan-name'),
-    clanNameDisplay: document.getElementById('clan-name-display'),
-    clanMembers: document.getElementById('clan-members'),
-    clanTreasury: document.querySelector('#clan-treasury span'),
-    leaderboard: document.getElementById('leaderboard'),
-    achieved: document.getElementById('achieved'),
-    progress: document.getElementById('progress'),
-    achievementsContainer: document.getElementById('achievements-container'),
-    notifications: document.getElementById('notifications')
-};
+// DOM Elements
+const creditsDisplay = document.getElementById('credits');
+const forcePointsDisplay = document.getElementById('forcePoints');
+const playerLevelDisplay = document.getElementById('playerLevel');
+const cpsDisplay = document.getElementById('cps');
+const lightsaber = document.getElementById('lightsaber');
+const clickEffect = document.getElementById('click-effect');
+const upgradesList = document.getElementById('upgrades-list');
+const achievementsGrid = document.getElementById('achievements-grid');
+const notification = document.getElementById('notification');
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+const createClanBtn = document.getElementById('create-clan-btn');
+const clanCreationSection = document.getElementById('clan-creation');
+const confirmClanBtn = document.getElementById('confirm-clan-btn');
+const clanNameInput = document.getElementById('clan-name');
+const noClanSection = document.getElementById('no-clan');
+const hasClanSection = document.getElementById('has-clan');
+const clanNameDisplay = document.getElementById('clan-name-display');
+const clanLevelDisplay = document.getElementById('clan-level');
+const clanTreasuryDisplay = document.getElementById('clan-treasury');
+const clanMembersList = document.getElementById('clan-members-list');
+const donateBtn = document.getElementById('donate-btn');
+const donationAmountInput = document.getElementById('donation-amount');
 
-// Инициализация игры
-function init() {
+// Initialize the game
+function initGame() {
     loadGame();
-    renderAll();
-    startGameLoop();
+    setupTabs();
+    renderUpgrades();
+    renderAchievements();
+    updateBossesUI();
+    setupClanUI();
+    setupClicker();
+    startPassiveIncome();
+    checkDailyReward();
+    
+    // Update UI
+    updateUI();
 }
 
-function loadGame() {
-    const save = localStorage.getItem('swClickerSave');
-    if (save) {
-        Object.assign(gameState, JSON.parse(save));
-    }
+// Setup tab navigation
+function setupTabs() {
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            
+            // Hide all tabs
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Deactivate all buttons
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            button.classList.add('active');
+        });
+    });
 }
 
-function saveGame() {
-    localStorage.setItem('swClickerSave', JSON.stringify(gameState));
+// Setup clicker functionality
+function setupClicker() {
+    lightsaber.addEventListener('click', (e) => {
+        // Calculate click position
+        const rect = lightsaber.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Position click effect
+        clickEffect.style.left = `${x - 25}px`;
+        clickEffect.style.top = `${y - 25}px`;
+        
+        // Animate click effect
+        clickEffect.style.opacity = '1';
+        clickEffect.style.transform = 'scale(0)';
+        setTimeout(() => {
+            clickEffect.style.opacity = '0';
+            clickEffect.style.transform = 'scale(2)';
+        }, 10);
+        
+        // Add credits
+        const creditsEarned = 1 + Math.floor(gameState.level / 5);
+        gameState.credits += creditsEarned;
+        gameState.clickCount++;
+        
+        // Chance to get force points (1%)
+        if (Math.random() < 0.01) {
+            gameState.forcePoints++;
+            showNotification(`+1 Очко Силы!`);
+        }
+        
+        // Add XP
+        addXP(1);
+        
+        // Update UI
+        updateUI();
+        
+        // Check achievements
+        checkAchievements();
+    });
 }
 
-function startGameLoop() {
+// Start passive income
+function startPassiveIncome() {
     setInterval(() => {
-        gameState.credits += gameState.creditsPerSecond / 10;
-        updateDisplays();
-        saveGame();
+        if (gameState.cps > 0) {
+            gameState.credits += gameState.cps / 10;
+            updateUI();
+        }
     }, 100);
 }
 
-// Глобальные функции для вызова из HTML
-window.handleClick = function() {
-    gameState.credits += gameState.clickPower;
-    gameState.totalClicks++;
+// Update all UI elements
+function updateUI() {
+    creditsDisplay.textContent = formatNumber(gameState.credits);
+    forcePointsDisplay.textContent = formatNumber(gameState.forcePoints);
+    cpsDisplay.textContent = formatNumber(gameState.cps);
     
-    // Эффект клика
-    elements.clickEffect.style.animation = 'none';
-    void elements.clickEffect.offsetWidth;
-    elements.clickEffect.style.animation = 'clickEffect 0.5s';
+    // Update player level display
+    const levelTitles = [
+        "Падаван", "Рыцарь-джедай", "Магистр-джедай", "Член Совета", 
+        "Мастер-джедай", "Гранд-мастер", "Избранный", "Ситх", 
+        "Лорд ситхов", "Темный лорд"
+    ];
+    const titleIndex = Math.min(Math.floor(gameState.level / 3), levelTitles.length - 1);
+    playerLevelDisplay.textContent = `${levelTitles[titleIndex]} (Ур. ${gameState.level})`;
     
-    elements.clickPower.textContent = `+${gameState.clickPower}`;
-    elements.clickPower.style.opacity = '1';
-    elements.clickPower.style.animation = 'floatUp 0.5s forwards';
+    // Update upgrades UI
+    renderUpgrades();
     
-    if (Math.random() < 0.01) {
-        gameState.forcePoints += 1;
+    // Update clan UI if in clan
+    if (gameState.clan) {
+        clanNameDisplay.textContent = gameState.clan.name;
+        clanLevelDisplay.textContent = gameState.clan.level;
+        clanTreasuryDisplay.textContent = formatNumber(gameState.clan.treasury);
     }
-    
-    checkAchievements();
-    updateDisplays();
-    saveGame();
 }
 
-window.switchTab = function(tab) {
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('onclick').includes(tab));
-    });
+// Format large numbers
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return Math.floor(num);
+}
+
+// Render upgrades
+function renderUpgrades() {
+    upgradesList.innerHTML = '';
     
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.toggle('active', content.id === `${tab}-tab`);
+    gameState.upgrades.forEach(upgrade => {
+        const cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
+        const canAfford = gameState.credits >= cost;
+        
+        const upgradeElement = document.createElement('div');
+        upgradeElement.className = 'upgrade';
+        upgradeElement.innerHTML = `
+            <h3>${upgrade.name}</h3>
+            <p>${upgrade.description}</p>
+            <p>+${upgrade.cps} кредитов/сек</p>
+            <p>Куплено: ${upgrade.owned}</p>
+            <p>Стоимость: ${formatNumber(cost)} кредитов</p>
+            <button ${!canAfford ? 'disabled' : ''}>Купить</button>
+        `;
+        
+        const button = upgradeElement.querySelector('button');
+        button.addEventListener('click', () => {
+            buyUpgrade(upgrade.id);
+        });
+        
+        upgradesList.appendChild(upgradeElement);
     });
 }
 
-window.buyUpgrade = function(id) {
-    const upgrade = gameState.upgrades.find(u => u.id === id);
-    const cost = upgrade.cost * Math.pow(1.15, upgrade.owned);
+// Buy upgrade
+function buyUpgrade(upgradeId) {
+    const upgrade = gameState.upgrades.find(u => u.id === upgradeId);
+    const cost = Math.floor(upgrade.baseCost * Math.pow(1.15, upgrade.owned));
     
     if (gameState.credits >= cost) {
         gameState.credits -= cost;
         upgrade.owned++;
         
-        if (upgrade.multiplier) {
-            gameState.upgrades.forEach(u => {
-                if (u.id !== id) u.power *= 1.5;
-            });
-        } else {
-            gameState.creditsPerSecond += upgrade.power;
-        }
+        // Recalculate CPS
+        gameState.cps = gameState.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
         
-        renderUpgrades();
-        updateDisplays();
-        saveGame();
-    }
-}
-
-window.fightBoss = function(id) {
-    const boss = gameState.bosses.find(b => b.id === id);
-    if (!boss || boss.defeated) return;
-    
-    const damage = gameState.clickPower * (0.8 + Math.random() * 0.4);
-    boss.health -= damage;
-    
-    if (boss.health <= 0) {
-        boss.defeated = true;
-        gameState.credits += boss.reward;
-        gameState.forcePoints += boss.forceReward;
-        showNotification(`Победа!`, `Вы победили ${boss.name} и получили ${boss.reward} кредитов`);
-    }
-    
-    renderBosses();
-    updateDisplays();
-    saveGame();
-}
-
-window.createClan = function() {
-    const name = elements.clanName.value.trim();
-    if (!name) return;
-    
-    if (gameState.credits < 5000) {
-        showNotification('Ошибка', 'Нужно 5000 кредитов');
-        return;
-    }
-    
-    gameState.clan = {
-        name,
-        members: ['Вы'],
-        treasury: 0,
-        level: 1
-    };
-    
-    gameState.credits -= 5000;
-    renderClanTab();
-    updateDisplays();
-    saveGame();
-}
-
-window.joinClan = function() {
-    if (gameState.clans.length === 0) {
-        showNotification('Ошибка', 'Нет доступных кланов');
-        return;
-    }
-    
-    gameState.clan = gameState.clans[0];
-    gameState.clan.members.push('Вы');
-    renderClanTab();
-    saveGame();
-}
-
-window.donateToClan = function() {
-    if (!gameState.clan || gameState.credits < 1000) return;
-    
-    gameState.credits -= 1000;
-    gameState.clan.treasury += 1000;
-    
-    const newLevel = Math.floor(Math.log10(gameState.clan.treasury + 1)) + 1;
-    if (newLevel > gameState.clan.level) {
-        gameState.clan.level = newLevel;
-    }
-    
-    renderClanTab();
-    updateDisplays();
-    saveGame();
-}
-
-window.claimDailyReward = function() {
-    const now = new Date();
-    const lastClaimed = gameState.dailyReward.lastClaimed ? new Date(gameState.dailyReward.lastClaimed) : null;
-    
-    if (lastClaimed && now.toDateString() === lastClaimed.toDateString()) return;
-    
-    const reward = gameState.dailyReward.nextReward;
-    gameState.credits += reward;
-    gameState.dailyReward.streak++;
-    gameState.dailyReward.nextReward = Math.floor(reward * 1.1);
-    gameState.dailyReward.lastClaimed = now.toISOString();
-    
-    showNotification('Ежедневная награда', `Вы получили ${reward} кредитов!`);
-    updateDisplays();
-    saveGame();
-}
-
-function checkAchievements() {
-    gameState.achievements.forEach(ach => {
-        if (ach.unlocked) return;
+        // Add XP
+        addXP(5);
         
-        switch(ach.id) {
-            case 1: ach.progress = Math.min(gameState.credits, ach.target); break;
-            case 2: ach.progress = gameState.upgrades.reduce((sum, u) => sum + u.owned, 0); break;
-            case 3: ach.progress = gameState.bosses.filter(b => b.defeated).length; break;
-        }
+        // Update UI
+        updateUI();
+        showNotification(`Куплено: ${upgrade.name}`);
         
-        if (ach.progress >= ach.target) {
-            ach.unlocked = true;
-            gameState.credits += ach.reward;
-            showNotification('Достижение', `${ach.name} - ${ach.reward} кредитов`);
-        }
-    });
-    
-    renderAchievements();
-}
-
-function showNotification(title, message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.innerHTML = `<strong>${title}</strong><p>${message}</p>`;
-    elements.notifications.appendChild(notification);
-    setTimeout(() => notification.remove(), 3000);
-}
-
-function updateDisplays() {
-    elements.credits.textContent = Math.floor(gameState.credits);
-    elements.forcePoints.textContent = gameState.forcePoints;
-    elements.cps.textContent = gameState.creditsPerSecond.toFixed(1);
-    
-    const levelNames = ['Падаван', 'Рыцарь', 'Магистр', 'Совет', 'Верховный'];
-    elements.level.textContent = levelNames[Math.min(gameState.level - 1, levelNames.length - 1)];
-}
-
-function renderUpgrades() {
-    elements.upgradesContainer.innerHTML = '';
-    
-    gameState.upgrades.forEach(upgrade => {
-        const cost = upgrade.cost * Math.pow(1.15, upgrade.owned);
-        const upgradeEl = document.createElement('div');
-        upgradeEl.className = 'upgrade';
-        upgradeEl.innerHTML = `
-            <h3><i class="fas ${upgrade.icon}"></i> ${upgrade.name}</h3>
-            <p>Уровень: ${upgrade.owned}</p>
-            <p>+${upgrade.power.toFixed(1)} ${upgrade.multiplier ? 'множитель' : 'кредитов/сек'}</p>
-            <button onclick="buyUpgrade(${upgrade.id})" ${gameState.credits < cost ? 'disabled' : ''}>
-                Купить (${Math.floor(cost)})
-            </button>
-        `;
-        elements.upgradesContainer.appendChild(upgradeEl);
-    });
-}
-
-function renderBosses() {
-    elements.bossesContainer.innerHTML = '';
-    
-    gameState.bosses.forEach(boss => {
-        const bossEl = document.createElement('div');
-        bossEl.className = `boss ${boss.defeated ? 'defeated' : ''}`;
-        bossEl.innerHTML = `
-            <h3><i class="fas ${boss.icon}"></i> ${boss.name}</h3>
-            <p>Здоровье: ${boss.defeated ? '0' : Math.max(0, boss.health)}</p>
-            <p>Награда: ${boss.reward} кредитов</p>
-            <button onclick="fightBoss(${boss.id})" ${boss.defeated ? 'disabled' : ''}>
-                ${boss.defeated ? 'Победа' : 'Атаковать'}
-            </button>
-        `;
-        elements.bossesContainer.appendChild(bossEl);
-    });
-}
-
-function renderClanTab() {
-    if (gameState.clan) {
-        elements.clanNameDisplay.textContent = gameState.clan.name;
-        elements.clanTreasury.textContent = gameState.clan.treasury;
-        
-        elements.clanMembers.innerHTML = '';
-        gameState.clan.members.forEach(member => {
-            const memberEl = document.createElement('div');
-            memberEl.className = 'clan-member';
-            memberEl.textContent = member;
-            elements.clanMembers.appendChild(memberEl);
-        });
-        
-        document.getElementById('clan-info').style.display = 'block';
-    } else {
-        document.getElementById('clan-info').style.display = 'none';
+        // Check achievements
+        checkAchievements();
     }
-    
-    elements.leaderboard.innerHTML = '';
-    const sortedClans = [...gameState.clans, ...(gameState.clan ? [gameState.clan] : [])]
-        .sort((a, b) => b.treasury - a.treasury);
-    
-    sortedClans.forEach((clan, index) => {
-        const row = document.createElement('div');
-        row.className = 'leaderboard-row';
-        row.innerHTML = `
-            <span>${index + 1}. ${clan.name}</span>
-            <span>${clan.treasury}</span>
-        `;
-        elements.leaderboard.appendChild(row);
-    });
 }
 
+// Render achievements
 function renderAchievements() {
-    const unlocked = gameState.achievements.filter(a => a.unlocked).length;
-    elements.achieved.textContent = unlocked;
-    elements.progress.style.width = `${(unlocked / gameState.achievements.length) * 100}%`;
+    achievementsGrid.innerHTML = '';
     
-    elements.achievementsContainer.innerHTML = '';
-    gameState.achievements.forEach(ach => {
-        const achEl = document.createElement('div');
-        achEl.className = `achievement ${ach.unlocked ? 'unlocked' : ''}`;
-        achEl.innerHTML = `
-            <h4><i class="fas ${ach.icon}"></i> ${ach.name}</h4>
-            <p>${ach.desc}</p>
-            <p>Награда: ${ach.reward} кредитов</p>
-            ${!ach.unlocked ? `
-                <div class="achievement-progress">
-                    <div class="achievement-progress-bar" style="width: ${(ach.progress / ach.target) * 100}%"></div>
-                </div>
-                <small>${ach.progress}/${ach.target}</small>
-            ` : ''}
+    gameState.achievements.forEach(achievement => {
+        const achieved = achievement.achieved;
+        const progress = getAchievementProgress(achievement);
+        
+        const achievementElement = document.createElement('div');
+        achievementElement.className = `achievement ${achieved ? '' : 'locked'}`;
+        achievementElement.innerHTML = `
+            <img src="achievement_${achievement.id}.png" alt="${achievement.name}">
+            <h4>${achievement.name}</h4>
+            <p>${achievement.description}</p>
+            ${!achieved ? `<p>Прогресс: ${progress}/${achievement.goal}</p>` : ''}
         `;
-        elements.achievementsContainer.appendChild(achEl);
+        
+        achievementsGrid.appendChild(achievementElement);
     });
 }
 
-function renderAll() {
-    updateDisplays();
-    renderUpgrades();
-    renderBosses();
-    renderClanTab();
-    renderAchievements();
+// Get achievement progress
+function getAchievementProgress(achievement) {
+    switch(achievement.id) {
+        case 1: case 2: case 3: case 4: case 5:
+            return Math.min(gameState.credits, achievement.goal);
+        case 6: case 7: case 8: case 9:
+            return Math.min(gameState.forcePoints, achievement.goal);
+        case 10: case 11: case 12: case 13:
+            return Math.min(gameState.level, achievement.goal);
+        case 14: case 15: case 16: case 17:
+            const ownedUpgrades = gameState.upgrades.reduce((total, u) => total + u.owned, 0);
+            return Math.min(ownedUpgrades, achievement.goal);
+        case 18:
+            return gameState.bosses[0].currentHealth <= 0 ? 1 : 0;
+        case 19:
+            return gameState.bosses[1].currentHealth <= 0 ? 1 : 0;
+        case 20:
+            return gameState.bosses[2].currentHealth <= 0 ? 1 : 0;
+        case 21:
+            return gameState.clan ? 1 : 0;
+        case 22: case 23:
+            return gameState.clan ? Math.min(gameState.clan.totalDonations, achievement.goal) : 0;
+        case 24: case 25:
+            return gameState.clan ? Math.min(gameState.clan.level, achievement.goal) : 0;
+        case 26: case 27: case 28:
+            return Math.min(gameState.consecutiveDays, achievement.goal);
+        case 29: case 30:
+            return Math.min(gameState.clickCount, achievement.goal);
+        default:
+            return 0;
+    }
 }
 
-// Запуск игры
-window.addEventListener('DOMContentLoaded', init);
+// Check achievements
+function checkAchievements() {
+    let newAchievements = 0;
+    
+    gameState.achievements.forEach(achievement => {
+        if (!achievement.achieved) {
+            const progress = getAchievementProgress(achievement);
+            if (progress >= achievement.goal) {
+                achievement.achieved = true;
+                gameState.credits += achievement.reward;
+                newAchievements++;
+                showNotification(`Достижение: ${achievement.name}! +${achievement.reward} кредитов`);
+            }
+        }
+    });
+    
+    if (newAchievements > 0) {
+        renderAchievements();
+        updateUI();
+    }
+}
+
+// Add XP
+function addXP(amount) {
+    gameState.xp += amount;
+    
+    // Check for level up
+    while (gameState.xp >= gameState.xpToNextLevel) {
+        gameState.xp -= gameState.xpToNextLevel;
+        gameState.level++;
+        gameState.xpToNextLevel = Math.floor(gameState.xpToNextLevel * 1.2);
+        showNotification(`Уровень повышен! Теперь вы ${playerLevelDisplay.textContent}`);
+    }
+}
+
+// Update bosses UI
+function updateBossesUI() {
+    gameState.bosses.forEach(boss => {
+        const bossElement = document.getElementById(`boss-${boss.id}`);
+        if (bossElement) {
+            const healthBar = bossElement.querySelector('.health-bar');
+            const healthPercent = (boss.currentHealth / boss.maxHealth) * 100;
+            healthBar.style.width = `${healthPercent}%`;
+            
+            const attackBtn = bossElement.querySelector('.attack-btn');
+            attackBtn.textContent = `Атаковать (${boss.forceCost} ОС)`;
+            attackBtn.disabled = gameState.forcePoints < boss.forceCost || boss.currentHealth <= 0;
+            
+            attackBtn.onclick = () => attackBoss(boss.id);
+        }
+    });
+}
+
+// Attack boss
+function attackBoss(bossId) {
+    const boss = gameState.bosses.find(b => b.id === bossId);
+    
+    if (gameState.forcePoints >= boss.forceCost && boss.currentHealth > 0) {
+        gameState.forcePoints -= boss.forceCost;
+        
+        // Damage calculation based on player level
+        const damage = 50 + (gameState.level * 5);
+        boss.currentHealth = Math.max(0, boss.currentHealth - damage);
+        
+        // Check if boss defeated
+        if (boss.currentHealth <= 0) {
+            gameState.credits += boss.reward;
+            showNotification(`Босс побежден! +${boss.reward} кредитов`);
+            
+            // Add XP
+            addXP(20);
+        }
+        
+        // Update UI
+        updateUI();
+        updateBossesUI();
+        checkAchievements();
+    }
+}
+
+// Setup clan UI
+function setupClanUI() {
+    if (gameState.clan) {
+        noClanSection.style.display = 'none';
+        hasClanSection.style.display = 'block';
+        
+        // Update clan members list
+        clanMembersList.innerHTML = '';
+        gameState.clan.members.forEach(member => {
+            const li = document.createElement('li');
+            li.textContent = member;
+            clanMembersList.appendChild(li);
+        });
+    } else {
+        noClanSection.style.display = 'block';
+        hasClanSection.style.display = 'none';
+    }
+    
+    // Clan creation
+    createClanBtn.addEventListener('click', () => {
+        if (gameState.credits >= 5000) {
+            clanCreationSection.style.display = 'block';
+        } else {
+            showNotification('Недостаточно кредитов (нужно 5,000)');
+        }
+    });
+    
+    confirmClanBtn.addEventListener('click', () => {
+        const clanName = clanNameInput.value.trim();
+        if (clanName.length >= 3 && clanName.length <= 20) {
+            gameState.credits -= 5000;
+            gameState.clan = {
+                name: clanName,
+                level: 1,
+                treasury: 0,
+                totalDonations: 0,
+                members: ['Вы']
+            };
+            
+            clanCreationSection.style.display = 'none';
+            clanNameInput.value = '';
+            setupClanUI();
+            updateUI();
+            showNotification(`Клан "${clanName}" создан!`);
+            
+            // Add XP
+            addXP(10);
+            
+            // Check achievements
+            checkAchievements();
+        } else {
+            showNotification('Название клана должно быть от 3 до 20 символов');
+        }
+    });
+    
+    // Donations
+    donateBtn.addEventListener('click', () => {
+        const amount = parseInt(donationAmountInput.value);
+        if (amount >= 1000 && gameState.credits >= amount) {
+            gameState.credits -= amount;
+            gameState.clan.treasury += amount;
+            gameState.clan.totalDonations += amount;
+            
+            // Check for clan level up (10,000 credits per level)
+            const levelsGained = Math.floor(gameState.clan.treasury / 10000) - (gameState.clan.level - 1);
+            if (levelsGained > 0) {
+                gameState.clan.level += levelsGained;
+                showNotification(`Клан повышен до уровня ${gameState.clan.level}!`);
+            }
+            
+            updateUI();
+            showNotification(`Пожертвовано ${amount} кредитов в клан`);
+            
+            // Add XP
+            addXP(2);
+            
+            // Check achievements
+            checkAchievements();
+        } else {
+            showNotification('Минимальное пожертвование - 1,000 кредитов');
+        }
+    });
+}
+
+// Show notification
+function showNotification(message) {
+    notification.textContent = message;
+    notification.style.opacity = '1';
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+    }, 3000);
+}
+
+// Check daily reward
+function checkDailyReward() {
+    const today = new Date().toDateString();
+    
+    if (gameState.lastPlayDate !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (gameState.lastPlayDate === yesterday.toDateString()) {
+            gameState.consecutiveDays++;
+        } else if (gameState.lastPlayDate !== today) {
+            gameState.consecutiveDays = 1;
+        }
+        
+        gameState.lastPlayDate = today;
+        
+        // Calculate reward (100 * 1.1^consecutiveDays)
+        const reward = Math.floor(100 * Math.pow(1.1, gameState.consecutiveDays - 1));
+        gameState.credits += reward;
+        
+        showNotification(`Ежедневная награда: ${reward} кредитов (День ${gameState.consecutiveDays})`);
+        updateUI();
+        checkAchievements();
+    }
+}
+
+// Save game
+function saveGame() {
+    localStorage.setItem('starWarsClicker', JSON.stringify(gameState));
+}
+
+// Load game
+function loadGame() {
+    const savedGame = localStorage.getItem('starWarsClicker');
+    if (savedGame) {
+        const parsed = JSON.parse(savedGame);
+        Object.assign(gameState, parsed);
+        
+        // Recalculate CPS in case the formula changed
+        gameState.cps = gameState.upgrades.reduce((total, u) => total + (u.owned * u.cps), 0);
+    }
+}
+
+// Auto-save every 30 seconds
+setInterval(saveGame, 30000);
+
+// Save on page unload
+window.addEventListener('beforeunload', saveGame);
+
+// Initialize the game when DOM is loaded
+document.addEventListener('DOMContentLoaded', initGame);
