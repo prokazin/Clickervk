@@ -1,86 +1,142 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Star Wars Кликер</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR WARS Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="star-wars-font">STAR WARS</h1>
+            <h1 class="star-wars-title">STAR WARS</h1>
             <div class="player-info">
-                <div id="credits"><i class="fas fa-coins"></i> <span>0</span></div>
-                <div id="force-points"><i class="fas fa-bolt"></i> <span>0</span></div>
-                <div id="level"><i class="fas fa-level-up-alt"></i> <span>Падаван</span></div>
+                <div class="credits">
+                    <i class="fas fa-coins"></i>
+                    <span id="credits">0</span>
+                </div>
+                <div class="force-points">
+                    <i class="fas fa-jedi"></i>
+                    <span id="forcePoints">0</span>
+                </div>
+                <div class="level">
+                    <span id="playerLevel">Падаван</span>
+                </div>
             </div>
         </header>
 
-        <nav class="tabs">
-            <button class="tab-button active" onclick="switchTab('main')"><i class="fas fa-jedi"></i></button>
-            <button class="tab-button" onclick="switchTab('upgrades')"><i class="fas fa-cogs"></i></button>
-            <button class="tab-button" onclick="switchTab('bosses')"><i class="fas fa-skull"></i></button>
-            <button class="tab-button" onclick="switchTab('clan')"><i class="fas fa-users"></i></button>
-            <button class="tab-button" onclick="switchTab('achievements')"><i class="fas fa-trophy"></i></button>
-        </nav>
-
         <main>
-            <div id="main-tab" class="tab-content active">
-                <div id="lightsaber-container" onclick="handleClick()">
-                    <div id="lightsaber"></div>
-                    <div id="click-effect"></div>
-                    <div id="click-power">+1</div>
-                </div>
-                <div class="stats">
-                    <div id="cps"><i class="fas fa-tachometer-alt"></i> <span>0/сек</span></div>
-                    <button id="daily-reward-btn" onclick="claimDailyReward()"><i class="fas fa-calendar-day"></i> Награда</button>
-                </div>
-            </div>
-
-            <div id="upgrades-tab" class="tab-content">
-                <div class="upgrades-grid" id="upgrades-container"></div>
-            </div>
-
-            <div id="bosses-tab" class="tab-content">
-                <div class="bosses-grid" id="bosses-container"></div>
-            </div>
-
-            <div id="clan-tab" class="tab-content">
-                <div class="clan-section">
-                    <input type="text" id="clan-name" placeholder="Название клана">
-                    <button id="create-clan" onclick="createClan()"><i class="fas fa-plus"></i> Создать</button>
-                    <button id="join-clan" onclick="joinClan()"><i class="fas fa-sign-in-alt"></i> Вступить</button>
-                </div>
-                <div id="clan-info">
-                    <h3><i class="fas fa-flag"></i> <span id="clan-name-display">Нет клана</span></h3>
-                    <div id="clan-members"></div>
-                    <div id="clan-treasury"><i class="fas fa-coins"></i> <span>0</span></div>
-                    <button id="donate-btn" onclick="donateToClan()"><i class="fas fa-donate"></i> Внести 1000</button>
-                </div>
-                <div class="clan-leaderboard">
-                    <h3><i class="fas fa-medal"></i> Топ кланов</h3>
-                    <div id="leaderboard"></div>
-                </div>
-            </div>
-
-            <div id="achievements-tab" class="tab-content">
-                <div class="achievements-header">
-                    <div class="progress">
-                        <span id="achieved">0</span>/15
-                        <div class="progress-bar"><div id="progress"></div></div>
+            <div class="tab-content active" id="main-tab">
+                <div class="clicker-container">
+                    <div class="clicker-display">
+                        <img src="your_lightsaber_image.png" alt="Lightsaber" id="lightsaber" class="clickable">
+                        <div class="click-effect" id="click-effect"></div>
+                    </div>
+                    <div class="cps-display">
+                        <span id="cps">0</span> кредитов/сек
                     </div>
                 </div>
-                <div class="achievements-grid" id="achievements-container"></div>
+            </div>
+
+            <div class="tab-content" id="upgrades-tab">
+                <h2>Улучшения</h2>
+                <div class="upgrades-list" id="upgrades-list">
+                    <!-- Upgrades will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="bosses-tab">
+                <h2>Боссы</h2>
+                <div class="bosses-container">
+                    <div class="boss" id="darth-vader">
+                        <img src="vader_image.png" alt="Darth Vader">
+                        <h3>Дарт Вейдер</h3>
+                        <div class="boss-health">
+                            <div class="health-bar" style="width: 100%"></div>
+                        </div>
+                        <button class="attack-btn">Атаковать (100 ОС)</button>
+                    </div>
+                    <div class="boss" id="darth-maul">
+                        <img src="maul_image.png" alt="Darth Maul">
+                        <h3>Дарт Мол</h3>
+                        <div class="boss-health">
+                            <div class="health-bar" style="width: 100%"></div>
+                        </div>
+                        <button class="attack-btn">Атаковать (250 ОС)</button>
+                    </div>
+                    <div class="boss" id="obi-wan">
+                        <img src="obiwan_image.png" alt="Obi-Wan Kenobi">
+                        <h3>Оби-Ван Кеноби</h3>
+                        <div class="boss-health">
+                            <div class="health-bar" style="width: 100%"></div>
+                        </div>
+                        <button class="attack-btn">Атаковать (500 ОС)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="clan-tab">
+                <h2>Клан</h2>
+                <div id="clan-section">
+                    <div id="no-clan">
+                        <p>Вы не состоите в клане</p>
+                        <button id="create-clan-btn">Создать клан (5,000 кредитов)</button>
+                        <div id="clan-creation" style="display: none;">
+                            <input type="text" id="clan-name" placeholder="Название клана">
+                            <button id="confirm-clan-btn">Подтвердить</button>
+                        </div>
+                    </div>
+                    <div id="has-clan" style="display: none;">
+                        <h3 id="clan-name-display"></h3>
+                        <p>Уровень клана: <span id="clan-level">1</span></p>
+                        <p>Казна: <span id="clan-treasury">0</span> кредитов</p>
+                        <div class="clan-members">
+                            <h4>Участники:</h4>
+                            <ul id="clan-members-list"></ul>
+                        </div>
+                        <div class="donation-section">
+                            <input type="number" id="donation-amount" min="1000" value="1000" step="1000">
+                            <button id="donate-btn">Пожертвовать</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="achievements-tab">
+                <h2>Достижения</h2>
+                <div class="achievements-grid" id="achievements-grid">
+                    <!-- Achievements will be added here dynamically -->
+                </div>
             </div>
         </main>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="main-tab">
+                <i class="fas fa-sword"></i>
+                <span>Главная</span>
+            </button>
+            <button class="tab-btn" data-tab="upgrades-tab">
+                <i class="fas fa-cog"></i>
+                <span>Улучшения</span>
+            </button>
+            <button class="tab-btn" data-tab="bosses-tab">
+                <i class="fas fa-skull"></i>
+                <span>Боссы</span>
+            </button>
+            <button class="tab-btn" data-tab="clan-tab">
+                <i class="fas fa-users"></i>
+                <span>Клан</span>
+            </button>
+            <button class="tab-btn" data-tab="achievements-tab">
+                <i class="fas fa-trophy"></i>
+                <span>Достижения</span>
+            </button>
+        </nav>
     </div>
 
-    <div id="notifications"></div>
+    <div class="notification" id="notification"></div>
 
-    <script src="game.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
