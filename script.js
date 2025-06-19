@@ -59,27 +59,9 @@ const elements = {
 
 // Инициализация игры
 function init() {
-    setupTelegramStyles();
     loadGame();
-    setupEventListeners();
     renderAll();
     startGameLoop();
-}
-
-function setupTelegramStyles() {
-    if (tg.platform === 'tdesktop' || tg.platform === 'macos') {
-        document.documentElement.style.setProperty('--tg-button-size', '40px');
-    } else {
-        document.documentElement.style.setProperty('--tg-button-size', '48px');
-    }
-    
-    if (tg.colorScheme === 'dark') {
-        document.documentElement.style.setProperty('--tg-bg-color', '#18222d');
-        document.documentElement.style.setProperty('--tg-text-color', '#ffffff');
-    } else {
-        document.documentElement.style.setProperty('--tg-bg-color', '#ffffff');
-        document.documentElement.style.setProperty('--tg-text-color', '#000000');
-    }
 }
 
 function loadGame() {
@@ -93,60 +75,6 @@ function saveGame() {
     localStorage.setItem('swClickerSave', JSON.stringify(gameState));
 }
 
-function setupEventListeners() {
-    // Улучшенный обработчик для меча
-    elements.lightsaber.addEventListener('pointerdown', handleClick);
-    elements.lightsaber.addEventListener('click', handleClick);
-    
-    // Обработчики для вкладок
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('pointerdown', function(e) {
-            e.preventDefault();
-            this.classList.add('active-touch');
-            const tab = this.dataset.tab;
-            switchTab(tab);
-        });
-        
-        btn.addEventListener('pointerup', function() {
-            this.classList.remove('active-touch');
-        });
-    });
-    
-    // Обработчики для кнопок
-    document.querySelectorAll('.clickable-element').forEach(btn => {
-        btn.addEventListener('pointerdown', function() {
-            this.classList.add('active-touch');
-        });
-        
-        btn.addEventListener('pointerup', function() {
-            this.classList.remove('active-touch');
-        });
-        
-        btn.addEventListener('pointerleave', function() {
-            this.classList.remove('active-touch');
-        });
-    });
-    
-    // Специфичные обработчики кнопок
-    document.getElementById('daily-reward-btn').addEventListener('click', claimDailyReward);
-    document.getElementById('create-clan').addEventListener('click', createClan);
-    document.getElementById('join-clan').addEventListener('click', joinClan);
-    document.getElementById('donate-btn').addEventListener('click', donateToClan);
-    
-    // Динамические элементы
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.buy-upgrade')) {
-            const id = parseInt(e.target.closest('.buy-upgrade').dataset.id);
-            buyUpgrade(id);
-        }
-        
-        if (e.target.closest('.fight-boss')) {
-            const id = parseInt(e.target.closest('.fight-boss').dataset.id);
-            fightBoss(id);
-        }
-    });
-}
-
 function startGameLoop() {
     setInterval(() => {
         gameState.credits += gameState.creditsPerSecond / 10;
@@ -155,8 +83,8 @@ function startGameLoop() {
     }, 100);
 }
 
-function handleClick(e) {
-    e.preventDefault();
+// Глобальные функции для вызова из HTML
+window.handleClick = function() {
     gameState.credits += gameState.clickPower;
     gameState.totalClicks++;
     
@@ -165,12 +93,10 @@ function handleClick(e) {
     void elements.clickEffect.offsetWidth;
     elements.clickEffect.style.animation = 'clickEffect 0.5s';
     
-    // Показать силу клика
     elements.clickPower.textContent = `+${gameState.clickPower}`;
     elements.clickPower.style.opacity = '1';
     elements.clickPower.style.animation = 'floatUp 0.5s forwards';
     
-    // Шанс получить Очко Силы
     if (Math.random() < 0.01) {
         gameState.forcePoints += 1;
     }
@@ -180,7 +106,17 @@ function handleClick(e) {
     saveGame();
 }
 
-function buyUpgrade(id) {
+window.switchTab = function(tab) {
+    document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(tab));
+    });
+    
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${tab}-tab`);
+    });
+}
+
+window.buyUpgrade = function(id) {
     const upgrade = gameState.upgrades.find(u => u.id === id);
     const cost = upgrade.cost * Math.pow(1.15, upgrade.owned);
     
@@ -202,7 +138,7 @@ function buyUpgrade(id) {
     }
 }
 
-function fightBoss(id) {
+window.fightBoss = function(id) {
     const boss = gameState.bosses.find(b => b.id === id);
     if (!boss || boss.defeated) return;
     
@@ -221,7 +157,7 @@ function fightBoss(id) {
     saveGame();
 }
 
-function createClan() {
+window.createClan = function() {
     const name = elements.clanName.value.trim();
     if (!name) return;
     
@@ -243,7 +179,7 @@ function createClan() {
     saveGame();
 }
 
-function joinClan() {
+window.joinClan = function() {
     if (gameState.clans.length === 0) {
         showNotification('Ошибка', 'Нет доступных кланов');
         return;
@@ -255,7 +191,7 @@ function joinClan() {
     saveGame();
 }
 
-function donateToClan() {
+window.donateToClan = function() {
     if (!gameState.clan || gameState.credits < 1000) return;
     
     gameState.credits -= 1000;
@@ -271,7 +207,7 @@ function donateToClan() {
     saveGame();
 }
 
-function claimDailyReward() {
+window.claimDailyReward = function() {
     const now = new Date();
     const lastClaimed = gameState.dailyReward.lastClaimed ? new Date(gameState.dailyReward.lastClaimed) : null;
     
@@ -308,16 +244,6 @@ function checkAchievements() {
     renderAchievements();
 }
 
-function switchTab(tab) {
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.tab === tab);
-    });
-    
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.toggle('active', content.id === `${tab}-tab`);
-    });
-}
-
 function showNotification(title, message) {
     const notification = document.createElement('div');
     notification.className = 'notification';
@@ -346,7 +272,7 @@ function renderUpgrades() {
             <h3><i class="fas ${upgrade.icon}"></i> ${upgrade.name}</h3>
             <p>Уровень: ${upgrade.owned}</p>
             <p>+${upgrade.power.toFixed(1)} ${upgrade.multiplier ? 'множитель' : 'кредитов/сек'}</p>
-            <button class="buy-upgrade clickable-element" data-id="${upgrade.id}" ${gameState.credits < cost ? 'disabled' : ''}>
+            <button onclick="buyUpgrade(${upgrade.id})" ${gameState.credits < cost ? 'disabled' : ''}>
                 Купить (${Math.floor(cost)})
             </button>
         `;
@@ -364,7 +290,7 @@ function renderBosses() {
             <h3><i class="fas ${boss.icon}"></i> ${boss.name}</h3>
             <p>Здоровье: ${boss.defeated ? '0' : Math.max(0, boss.health)}</p>
             <p>Награда: ${boss.reward} кредитов</p>
-            <button class="fight-boss clickable-element" data-id="${boss.id}" ${boss.defeated ? 'disabled' : ''}>
+            <button onclick="fightBoss(${boss.id})" ${boss.defeated ? 'disabled' : ''}>
                 ${boss.defeated ? 'Победа' : 'Атаковать'}
             </button>
         `;
@@ -438,4 +364,4 @@ function renderAll() {
 }
 
 // Запуск игры
-document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('DOMContentLoaded', init);
